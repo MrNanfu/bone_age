@@ -19,6 +19,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torchvision import transforms
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter  # 添加 TensorBoard
 
 # Other imports
 from tqdm import tqdm
@@ -142,6 +143,9 @@ if osp.exists(model_to_load) and args.rank == 0:
     weights.update(new_snapshot_dict)
     net.load_state_dict(weights)
 
+# TensorBoard 初始化
+writer = SummaryWriter(log_dir=args.save_folder + '/tensorboard_logs')
+
 net = net.to(device)
 
 # Criterion
@@ -245,6 +249,10 @@ def train(epoch, relative_age=True):
 
         time_stats.update(time.time() - start_time, 1)
         total_loss.update(loss, 1)
+        
+        # 记录 TensorBoard
+        writer.add_scalar('Loss/train', loss, epoch * len(train_loader) + batch_idx)
+        
         epoch_loss_stats.update(loss, 1)
         optimizer.zero_grad()
 
@@ -275,6 +283,7 @@ def train(epoch, relative_age=True):
 def evaluate(relative_age=True):
     net.eval()
     epoch_total_loss = AverageMeter()
+    absolute_loss_meter = AverageMeter()
     for (batch_idx, (imgs, bone_ages, genders, chronological_ages, _, gut, pe)) in enumerate(val_loader):
         imgs = imgs.to(device)
         bone_ages = bone_ages.to(device)
@@ -289,15 +298,26 @@ def evaluate(relative_age=True):
             outputs = net(imgs, genders, chronological_ages, gut, pe)
         if relative_age:
             loss = criterion(outputs.squeeze(), relative_ages)
+            predicted_bone_age = chronological_ages.squeeze(1) - outputs.squeeze()
         else:
             loss = criterion(outputs.squeeze(), bone_ages)
-        loss = metric_average(loss.item(), 'loss')
+            predicted_bone_age = outputs.squeeze()
+        absolute_loss = criterion(predicted_bone_age, bone_ages)
+        absolute_loss = metric_average(absolute_loss.item(), 'absolute_loss')
+        loss = metric_average(loss.item(), 'loss')   
         epoch_total_loss.update(loss, 1)
+        absolute_loss_meter.update(absolute_loss, 1)
+        
+        # 记录 TensorBoard
+        writer.add_scalar('Loss_relative/val', loss, batch_idx)
+        writer.add_scalar('Loss_absolute/val', absolute_loss, batch_idx)
 
     epoch_total_loss = epoch_total_loss.avg
+    absolute_loss_meter = absolute_loss_meter.avg
 
     if args.rank == 0:
-        print('Val loss: {:.5f}'.format(epoch_total_loss))
+        print('Relative val loss: {:.5f}'.format(epoch_total_loss))
+        print('Absolute val loss: {:.5f}'.format(absolute_loss_meter))
 
     return epoch_total_loss
         
@@ -338,6 +358,7 @@ def main():
                     filename = osp.join(args.save_folder, 'boneage_bonet_weights.pth')
                     torch.save(net.state_dict(), filename)
         out_file.close()
+        writer.close()
     except KeyboardInterrupt:
         print('-' * 89)
         print('Exiting from training early')

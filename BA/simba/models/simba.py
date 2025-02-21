@@ -66,17 +66,21 @@ class SIMBA(nn.Module):
             self.chronological = Multiplier(1)
             fc_1_size += 1
         
-        # 肠道菌群 Dense 层
+        # 肠道菌群 extractor 层
         self.use_gut_microbiome = use_gut_microbiome
         if self.use_gut_microbiome:
-            self.fc_gut = nn.Linear(48, 64)  # 处理 PUA + shannon
-            fc_1_size += 64
-        
-        # 运动表现 Dense层
+            # self.gut_extractor = nn.Linear(48, 64)  # 处理 PUA + shannon
+            # fc_1_size += 64
+            self.gut_extractor = GutMicrobiomeModule(input_dim=48, output_dim=128)
+            fc_1_size += 128
+            
+        # 运动表现 extractor 层
         self.use_pe_performance = use_pe_performance
         if self.use_pe_performance:
-            self.fc_pe = nn.Linear(6, 12)  # 处理 PUA + shannon
-            fc_1_size += 12
+            # self.pe_extractor = nn.Linear(6, 12)  # 处理 PUA + shannon
+            # fc_1_size += 12
+            self.pe_extractor = PhysicalPerformanceModule(input_dim=6, output_dim=32)
+            fc_1_size += 32
 
         self.fc_1 = DenseLayer(fc_1_size, 1000)
         self.fc_2 = DenseLayer(1000, 1000)
@@ -141,10 +145,10 @@ class SIMBA(nn.Module):
             z = self.chronological(z)
             features.append(z)
         if self.use_gut_microbiome:
-            gut = self.fc_gut(gut)
+            gut = self.gut_extractor(gut)
             features.append(gut)
         if self.use_pe_performance:
-            pe = self.fc_pe(pe)
+            pe = self.pe_extractor(pe)
             features.append(pe)
 
         x = torch.cat(features, dim=1)
@@ -390,3 +394,84 @@ class DenseLayer(nn.Module):
     def forward(self, x):
         x = self.linear(x)
         return F.relu(x, inplace=True)
+    
+    
+class GutMicrobiomeModule(nn.Module):
+    def __init__(self, input_dim=48, output_dim=128, hidden_dim=64):
+        super(GutMicrobiomeModule, self).__init__()
+        
+        # 多层 MLP
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
+        self.bn1 = nn.BatchNorm1d(hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.bn2 = nn.BatchNorm1d(hidden_dim)
+        self.fc3 = nn.Linear(hidden_dim, output_dim)
+        
+        self.dropout = nn.Dropout(0.3)  # 预防过拟合
+        self.relu = nn.ReLU()
+
+        # 自注意力层
+        self.attention = nn.MultiheadAttention(embed_dim=output_dim, num_heads=4, batch_first=True)
+    
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+        
+        x = self.fc2(x)
+        x = self.bn2(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+        
+        x = self.fc3(x)  # (batch, output_dim)
+        
+        # 添加注意力机制
+        x = x.unsqueeze(1)  # (batch, 1, output_dim)
+        attn_output, _ = self.attention(x, x, x)
+        x = attn_output.squeeze(1)  # (batch, output_dim)
+        
+        return x
+    
+    
+class PhysicalPerformanceModule(nn.Module):
+    def __init__(self, input_dim=6, output_dim=32, hidden_dim=16):
+        super(PhysicalPerformanceModule, self).__init__()
+
+        # 1D CNN 提取局部特征
+        self.conv1 = nn.Conv1d(in_channels=1, out_channels=8, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv1d(in_channels=8, out_channels=16, kernel_size=3, stride=1, padding=1)
+        
+        self.fc1 = nn.Linear(16 * input_dim, hidden_dim)
+        self.bn1 = nn.BatchNorm1d(hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, output_dim)
+
+        self.dropout = nn.Dropout(0.3)
+        self.relu = nn.ReLU()
+
+        # 注意力层
+        self.attention = nn.MultiheadAttention(embed_dim=output_dim, num_heads=2, batch_first=True)
+
+    def forward(self, x):
+        x = x.unsqueeze(1)  # (batch, 1, input_dim)
+        
+        x = self.conv1(x)
+        x = self.relu(x)
+        x = self.conv2(x)
+        x = self.relu(x)
+        
+        x = x.view(x.size(0), -1)  # 展平
+        x = self.fc1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+
+        x = self.fc2(x)  # (batch, output_dim)
+
+        # 添加注意力机制
+        x = x.unsqueeze(1)  # (batch, 1, output_dim)
+        attn_output, _ = self.attention(x, x, x)
+        x = attn_output.squeeze(1)  # (batch, output_dim)
+
+        return x
+
