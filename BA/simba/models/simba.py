@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 class SIMBA(nn.Module):
 
-    def __init__(self, num_classes=1, aux_logits=False, transform_input=False, chronological_age=True, gender_multiplier=True, use_gut_microbiome=True, use_pe_performance=True):
+    def __init__(self, num_classes=1, aux_logits=False, transform_input=False, chronological_age=True, gender_multiplier=True, use_gut_microbiome=True, use_pe_performance=True, use_correlation=True):
         super(SIMBA, self).__init__()
         # Inception
         self.aux_logits = aux_logits
@@ -81,6 +81,12 @@ class SIMBA(nn.Module):
             # fc_1_size += 12
             self.pe_extractor = PhysicalPerformanceModule(input_dim=6, output_dim=32)
             fc_1_size += 32
+        
+        # 相关特征 extractor 层
+        self.use_correlation = use_correlation
+        if self.use_correlation:
+            self.correlation_extractor = CorrelationFeatureModule(input_dim=20, output_dim=64)
+            fc_1_size += 64
 
         self.fc_1 = DenseLayer(fc_1_size, 1000)
         self.fc_2 = DenseLayer(1000, 1000)
@@ -97,7 +103,7 @@ class SIMBA(nn.Module):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
 
-    def forward(self, x, y, z, gut, pe):
+    def forward(self, x, y, z, gut, pe, cor):
         if self.transform_input:
             x_ch0 = torch.unsqueeze(x[:, 0], 1) * (0.229/0.5)+(0.485-0.5) / 0.5
             x_ch1 = torch.unsqueeze(x[:, 1], 1) * (0.224/0.5)+(0.456-0.5) / 0.5
@@ -150,6 +156,9 @@ class SIMBA(nn.Module):
         if self.use_pe_performance:
             pe = self.pe_extractor(pe)
             features.append(pe)
+        if self.use_correlation:
+            cor = self.correlation_extractor(cor)
+            features.append(cor)
 
         x = torch.cat(features, dim=1)
         
@@ -469,6 +478,41 @@ class PhysicalPerformanceModule(nn.Module):
         x = self.fc2(x)  # (batch, output_dim)
 
         # 添加注意力机制
+        x = x.unsqueeze(1)  # (batch, 1, output_dim)
+        attn_output, _ = self.attention(x, x, x)
+        x = attn_output.squeeze(1)  # (batch, output_dim)
+
+        return x
+    
+    
+class CorrelationFeatureModule(nn.Module):
+    def __init__(self, input_dim=20, output_dim=64, hidden_dim=32):
+        super(CorrelationFeatureModule, self).__init__()
+
+        # MLP 提取特征
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
+        self.bn1 = nn.BatchNorm1d(hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, output_dim)
+        self.bn2 = nn.BatchNorm1d(output_dim)
+        
+        self.dropout = nn.Dropout(0.3)
+        self.relu = nn.ReLU()
+
+        # 自注意力层
+        self.attention = nn.MultiheadAttention(embed_dim=output_dim, num_heads=4, batch_first=True)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+        
+        x = self.fc2(x)
+        x = self.bn2(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+
+        # 添加自注意力机制
         x = x.unsqueeze(1)  # (batch, 1, output_dim)
         attn_output, _ = self.attention(x, x, x)
         x = attn_output.squeeze(1)  # (batch, output_dim)

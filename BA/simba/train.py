@@ -46,6 +46,8 @@ parser.add_argument('--use-gut-microbiome', default=False, action='store_true',
                 help='Train model with gut microbiome')
 parser.add_argument('--use-pe-performance', default=False, action='store_true',
                 help='Train model with pe performance')
+parser.add_argument('--use-correlation', default=False, action='store_true',
+                help='Train model with correlation features')
 
 # Dataloading-related settings
 parser.add_argument('--cropped', default=False, action='store_true',
@@ -118,7 +120,8 @@ net = SIMBA(
     chronological_age=args.chronological_age,
     gender_multiplier=args.gender_multiplier,
     use_gut_microbiome=args.use_gut_microbiome,
-    use_pe_performance=args.use_pe_performance
+    use_pe_performance=args.use_pe_performance,
+    use_correlation=args.use_correlation
 )
 
 if args.rank == 0:
@@ -226,18 +229,19 @@ def train(epoch, relative_age=True):
     time_stats = AverageMeter()
     loss = 0
     optimizer.zero_grad()
-    for (batch_idx, (imgs, bone_ages, genders, chronological_ages, _, gut, pe)) in enumerate(train_loader):
+    for (batch_idx, (imgs, bone_ages, genders, chronological_ages, _, gut, pe, cor)) in enumerate(train_loader):
         imgs = imgs.to(device)
         bone_ages = bone_ages.to(device)
+        chronological_ages = chronological_ages.to(device)
         genders = genders.to(device)
         gut = gut.to(device)
         pe = pe.to(device)
-        chronological_ages = chronological_ages.to(device)
+        cor = cor.to(device)
         if relative_age:
             relative_ages = chronological_ages.squeeze(1) - bone_ages
 
         start_time = time.time()
-        outputs = net(imgs, genders, chronological_ages, gut, pe)
+        outputs = net(imgs, genders, chronological_ages, gut, pe, cor)
         if relative_age:
             loss = criterion(outputs.squeeze(), relative_ages)
         else:
@@ -284,18 +288,19 @@ def evaluate(relative_age=True):
     net.eval()
     epoch_total_loss = AverageMeter()
     absolute_loss_meter = AverageMeter()
-    for (batch_idx, (imgs, bone_ages, genders, chronological_ages, _, gut, pe)) in enumerate(val_loader):
+    for (batch_idx, (imgs, bone_ages, genders, chronological_ages, _, gut, pe, cor)) in enumerate(val_loader):
         imgs = imgs.to(device)
         bone_ages = bone_ages.to(device)
         genders = genders.to(device)
         gut = gut.to(device)
         pe = pe.to(device)
+        cor = cor.to(device)
         chronological_ages = chronological_ages.to(device)
         if relative_age:
             relative_ages = chronological_ages.squeeze(1) - bone_ages
 
         with torch.no_grad():
-            outputs = net(imgs, genders, chronological_ages, gut, pe)
+            outputs = net(imgs, genders, chronological_ages, gut, pe, cor)
         if relative_age:
             loss = criterion(outputs.squeeze(), relative_ages)
             predicted_bone_age = chronological_ages.squeeze(1) - outputs.squeeze()
