@@ -4,13 +4,13 @@ NUM_EPOCHS=150
 LR=0.0001
 PATIENCE=2
 BATCH_SIZE=20
-NUM_WORKERS=25
+NUM_WORKERS=4
 NUM_GPUS=1
 GPUS=0
 
 SSD_LOCATION='/private/workspace/cyt/bone_age_assessment/BA/simba'
 DATASET="KG"
-EXPERIMENT_NAME="best_experiment/"$DATASET/with_only_image
+EXPERIMENT_NAME="best_experiment/"$DATASET/with_cor
 SAVE_FOLDER=$SSD_LOCATION"/experiments/"$EXPERIMENT_NAME
 
 DATA_TRAIN='/private/workspace/cyt/bone_age_assessment/data/data_yuwei/train' #Path to  images
@@ -34,12 +34,9 @@ mkdir -p $SAVE_FOLDER
 SNAPSHOT=$SAVE_FOLDER"/boneage_bonet_snapshot.pth"
 OPTIM_SNAPSHOT=$SAVE_FOLDER"/boneage_bonet_optim.pth"
 
-CUDA_VISIBLE_DEVICES=$GPUS python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --relative-age
+# CUDA_VISIBLE_DEVICES=$GPUS python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --relative-age
 
-# CUDA_VISIBLE_DEVICES=$GPUS python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --relative-age --chronological-age --gender-multiplier --use-correlation
+CUDA_VISIBLE_DEVICES=$GPUS python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --relative-age --chronological-age --gender-multiplier --use-correlation
 
 # CUDA_VISIBLE_DEVICES=$GPUS python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --relative-age --chronological-age --gender-multiplier
 
-# python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --cropped --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --relative-age --chronological-age --gender-multiplier #>> $SAVE_FOLDER"/log.txt"
-# CUDA_VISIBLE_DEVICES=$GPUS mpirun --allow-run-as-root -np $NUM_GPUS -H localhost:$NUM_GPUS -bind-to none -map-by slot -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH -mca pml ob1 -mca btl ^openib python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --cropped --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --relative-age --chronological-age --gender-multiplier #>> $SAVE_FOLDER"/log.txt"
-# CUDA_VISIBLE_DEVICES=$GPUS mpirun --allow-run-as-root -np $NUM_GPUS -H localhost:$NUM_GPUS -bind-to none -map-by slot -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH -x HOROVOD_CUDA_HOME=/usr/local/cuda-10.0 -mca pml ob1 -mca btl ^openib python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --cropped --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --relative-age --chronological-age --gender-multiplier #>> $SAVE_FOLDER"/log.txt"

@@ -112,7 +112,7 @@ print('\n'.join(['--{0} {1}'.format(arg, args_dict[arg])
 print('\n\n')
 
 torch.manual_seed(args.seed)
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
 # Create the network architecture and load the best model
@@ -202,6 +202,8 @@ val_dataset = Dataset([args.data_val], [args.heatmaps_val],
 
 train_sampler = None
 val_sampler = None
+
+print('Number of workers:{}'.format(args.workers))
 
 train_loader = DataLoader(train_dataset,
                             shuffle=(train_sampler is None),
