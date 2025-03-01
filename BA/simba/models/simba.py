@@ -14,6 +14,7 @@ class SIMBA(nn.Module):
         self.transform_input = transform_input
         self.chronological_age = chronological_age
         self.gender_multiplier = gender_multiplier
+        self.gradients = None
 
         self.Conv2d_1a_3x3 = nn.ModuleList()
         self.Conv2d_2a_3x3 = nn.ModuleList()
@@ -103,6 +104,12 @@ class SIMBA(nn.Module):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
 
+    # def get_gradients(self):
+    #     return self.gradients
+
+    # def activations_hook(self, grad):
+    #     self.gradients = grad
+
     def forward(self, x, y, z, gut, pe, cor):
         if self.transform_input:
             x_ch0 = torch.unsqueeze(x[:, 0], 1) * (0.229/0.5)+(0.485-0.5) / 0.5
@@ -140,6 +147,7 @@ class SIMBA(nn.Module):
         x = self.Mixed_7a(x)
         x = self.Mixed_7b(x)
         x = self.Mixed_7c(x)
+        # h = x.register_hook(self.activations_hook)
         x = F.avg_pool2d(x, kernel_size=2)
         x = x.view(x.size(0), -1)
 
