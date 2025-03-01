@@ -224,7 +224,7 @@ if not os.path.exists(args.save_folder):
 
 from tqdm import tqdm  # 确保 tqdm 被正确导入
 
-def train(epoch, relative_age=True):
+def train(epoch, relative_age=False):
     net.train()
     total_loss = AverageMeter()
     epoch_loss_stats = AverageMeter()
@@ -275,14 +275,14 @@ def train(epoch, relative_age=True):
     epoch_total_loss = epoch_loss_stats.avg
     args.resume_iter = 0
 
-    if args.rank == 0:
-        filename = 'boneage_bonet_snapshot.pth'
-        filename = osp.join(args.save_folder, filename)
-        torch.save(net.state_dict(), filename)
+    # if args.rank == 0:
+    #     filename = 'boneage_bonet_snapshot.pth'
+    #     filename = osp.join(args.save_folder, filename)
+    #     torch.save(net.state_dict(), filename)
 
-        optim_filename = 'boneage_bonet_optim.pth'
-        optim_filename = osp.join(args.save_folder, optim_filename)
-        torch.save(optimizer.state_dict(), optim_filename)
+    #     optim_filename = 'boneage_bonet_optim.pth'
+    #     optim_filename = osp.join(args.save_folder, optim_filename)
+    #     torch.save(optimizer.state_dict(), optim_filename)
 
     return epoch_total_loss
 

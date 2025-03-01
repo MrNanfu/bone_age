@@ -9,10 +9,10 @@ GPUS=0
 # 路径设置
 SSD_LOCATION='/private/workspace/cyt/bone_age_assessment/BA/simba'
 DATASET="KG"
-EXPERIMENT_NAME="best_experiment/"$DATASET/with_only_image # with_only_image with_gender_c_age_cor
+EXPERIMENT_NAME="best_experiment/"$DATASET/with_only_image_seg_abs # with_only_image with_gender_c_age_cor
 
 
-DATA_TEST='/private/workspace/cyt/bone_age_assessment/data/data_yuwei/val'  # 测试图像路径
+DATA_TEST='/private/workspace/cyt/bone_age_assessment/data/data_yuwei/val_clean'  # 测试图像路径
 HEATMAPS_TEST=$SSD_LOCATION"/experiments/"$EXPERIMENT_NAME"/HEATMAPS_TEST" # 测试热力图路径 (自动创建)
 ANN_PATH_TEST='/private/workspace/cyt/bone_age_assessment/data/data_yuwei/annotations/val_ann.csv'  # CSV 标注路径
 ROIS_PATH_TEST='/private/workspace/cyt/bone_age_assessment/data/RSNA/annotations/RSNA_Anatomical_ROIs_Validation.json' # ROI JSON 标注路径
@@ -62,7 +62,7 @@ SAVE_FILE="validation_bestmodel.csv"
     --snapshot $SNAPSHOT \
     --dataset $DATASET \
     --workers $NUM_WORKERS \
-    --relative-age \
+    # --relative-age \
 
 echo "Testing completed. Results saved in $SAVE_FOLDER/$SAVE_FILE"
 echo "Grad-CAM visualizations saved in $GRADCAM_FOLDER"

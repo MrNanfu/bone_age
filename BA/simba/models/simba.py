@@ -7,14 +7,16 @@ from tqdm import tqdm
 
 class SIMBA(nn.Module):
 
-    def __init__(self, num_classes=1, aux_logits=False, transform_input=False, chronological_age=True, gender_multiplier=True, use_gut_microbiome=True, use_pe_performance=True, use_correlation=True):
+    def __init__(self, num_classes=1, aux_logits=False, transform_input=False, chronological_age=False, gender_multiplier=False, use_gut_microbiome=False, use_pe_performance=False, use_correlation=False):
         super(SIMBA, self).__init__()
         # Inception
         self.aux_logits = aux_logits
         self.transform_input = transform_input
         self.chronological_age = chronological_age
         self.gender_multiplier = gender_multiplier
-        self.gradients = None
+        self.use_gut_microbiome = use_gut_microbiome
+        self.use_pe_performance = use_pe_performance
+        self.use_correlation = use_correlation
 
         self.Conv2d_1a_3x3 = nn.ModuleList()
         self.Conv2d_2a_3x3 = nn.ModuleList()
@@ -68,7 +70,6 @@ class SIMBA(nn.Module):
             fc_1_size += 1
         
         # 肠道菌群 extractor 层
-        self.use_gut_microbiome = use_gut_microbiome
         if self.use_gut_microbiome:
             # self.gut_extractor = nn.Linear(48, 64)  # 处理 PUA + shannon
             # fc_1_size += 64
@@ -76,7 +77,6 @@ class SIMBA(nn.Module):
             fc_1_size += 128
             
         # 运动表现 extractor 层
-        self.use_pe_performance = use_pe_performance
         if self.use_pe_performance:
             # self.pe_extractor = nn.Linear(6, 12)  # 处理 PUA + shannon
             # fc_1_size += 12
@@ -84,7 +84,6 @@ class SIMBA(nn.Module):
             fc_1_size += 32
         
         # 相关特征 extractor 层
-        self.use_correlation = use_correlation
         if self.use_correlation:
             self.correlation_extractor = CorrelationFeatureModule(input_dim=20, output_dim=64)
             fc_1_size += 64
@@ -150,11 +149,11 @@ class SIMBA(nn.Module):
         # h = x.register_hook(self.activations_hook)
         x = F.avg_pool2d(x, kernel_size=2)
         x = x.view(x.size(0), -1)
-
-        y = self.gender(y)
+        features = [x]  # 图像特征 & 性别
         
-        features = [x, y]  # 图像特征 & 性别
-
+        y = self.gender(y)
+        features.append(y)
+        
         if self.chronological_age:
             z = self.chronological(z)
             features.append(z)

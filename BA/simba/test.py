@@ -161,14 +161,24 @@ test_loader = DataLoader(test_dataset,
 
 def main():
     print('Inference begins...')
+    
+    # 读取 ID 信息
     carpograms = pd.read_csv(os.path.join('Paths', args.ann_path_test))
     ids = carpograms['ID']
     p_dict = dict.fromkeys(ids)
-    p_dict = test(args, net, test_loader, test_sampler,
-                  criterion, p_dict, relative_age=args.relative_age, inference=args.inference_only)
-    df = pd.DataFrame.from_dict(p_dict, orient="index")
-    
-    df.to_csv(os.path.join(args.save_folder, 'inference', args.save_file), header=False)
+
+    # 运行测试并获取预测和真值
+    p_dict = test(args, net, test_loader, test_sampler, criterion, p_dict, 
+                  relative_age=args.relative_age, inference=args.inference_only)
+
+    # 处理成 DataFrame
+    data_list = [{"ID": k, "True Age": v[0], "Predicted Age": v[1]} for k, v in p_dict.items()]
+    df = pd.DataFrame(data_list)
+
+    # 保存 CSV
+    df.to_csv(os.path.join(args.save_folder, 'inference', args.save_file), index=False)
+    print(f"Results saved to {os.path.join(args.save_folder, 'inference', args.save_file)}")
+
 
 def test(args, net, loader, sampler, criterion, p_dict, relative_age=True, inference=False):
     net.eval()
@@ -190,7 +200,8 @@ def test(args, net, loader, sampler, criterion, p_dict, relative_age=True, infer
                     loss = criterion(outputs.squeeze(), bone_ages)
             
                 epoch_loss.update(loss)
-            p_dict[p_id.item()] = outputs.item()
+            # 存储 ID、真实骨龄、预测骨龄
+            p_dict[p_id.item()] = (bone_ages.item(), outputs.item())
     if not inference:
         loss = metric_average(epoch_loss.avg,'loss')
 
