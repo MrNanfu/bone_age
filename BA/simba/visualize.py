@@ -30,6 +30,8 @@ parser.add_argument('--gender-multiplier', default=False, action='store_true')
 parser.add_argument('--use-gut-microbiome', default=False, action='store_true')
 parser.add_argument('--use-pe-performance', default=False, action='store_true')
 parser.add_argument('--use-correlation', default=False, action='store_true')
+parser.add_argument('--use-image', default=False, action='store_true',
+                help='Train model with image')
 
 # Dataloading settings
 parser.add_argument('--dataset', default='RSNA', type=str, choices=['RSNA', 'RHPE', 'KG'])
@@ -113,9 +115,9 @@ class GradCAM:
     def save_gradient(self, module, grad_input, grad_output):
         self.gradients = grad_output[0]
 
-    def generate_cam(self, input_tensor, gender, target_class):
+    def generate_cam(self, input_tensor, gender, chronological_age, gut, pe, cor):
         self.model.zero_grad()
-        output = self.model(input_tensor, gender, None, None, None, None)
+        output = self.model(input_tensor, gender, chronological_age, gut, pe, cor)
         
         if isinstance(output, tuple):  # 可能有辅助分类器
             output = output[0]
@@ -139,38 +141,69 @@ class GradCAM:
 
 
 
-import numpy as np
+import os
 import cv2
-import time
+import numpy as np
 
-def apply_heatmap(img, heatmap, save_dir, p_id):
+def apply_heatmap(img, heatmap, save_dir, p_id, blur_ksize=7):
+    """
+    叠加 Grad-CAM 热力图并保存，同时保存原始归一化图像
     
+    参数:
+        img: 原始灰度图像 (numpy array)
+        heatmap: 热力图 (numpy array)
+        save_dir: 保存目录
+        p_id: 图片 ID
+        blur_ksize: 高斯模糊核大小，默认 5，可调整
 
-    # 2. **归一化并转换为 uint8**
-    img = (img - img.min()) / (img.max() - img.min())  # 归一化到 0-1
-    img = np.uint8(255 * img)  # 转换到 0-255
+    返回:
+        superimposed_img: 叠加后的 Grad-CAM 结果
+    """
 
-    # 3. **转换为 BGR 3 通道**
-    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    # 1. **归一化 img 并转换为 uint8**
+    img = (img - img.min()) / (img.max() - img.min() + 1e-8)  # 避免除零
+    img_uint8 = np.uint8(255 * img)  # 转换到 0-255
 
-    # 4. **调整 heatmap**
-    heatmap = cv2.resize(heatmap, (img.shape[1], img.shape[0]))  # 调整 heatmap 大小
-    heatmap = np.uint8(255 * heatmap)  # 归一化到 0-255
-    heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)  # 伪彩色映射
+    # 2. **转换为 BGR 3 通道**
+    img_bgr = cv2.cvtColor(img_uint8, cv2.COLOR_GRAY2BGR)
 
-    # 5. **确保 img 和 heatmap 形状匹配**
-    assert img.shape == heatmap.shape, f"Shape mismatch: img {img.shape}, heatmap {heatmap.shape}"
+    # 3. **调整 heatmap 大小**
+    heatmap = cv2.resize(heatmap, (img_bgr.shape[1], img_bgr.shape[0]))  # 调整 heatmap 大小
 
-    # 6. **叠加 Grad-CAM 热力图**
-    superimposed_img = cv2.addWeighted(img, 0.6, heatmap, 0.4, 0)
-    
-    # 7. **保存到指定路径**
-    save_path = os.path.join(save_dir, 'gradcam', p_id+'.png')
-    cv2.imwrite(save_path, superimposed_img)  # 保存图像
+    # 4. **最大最小归一化 heatmap**
+    heatmap = (heatmap - heatmap.min()) / (heatmap.max() - heatmap.min() + 1e-8)  # 归一化到 0-1
+    heatmap = np.uint8(255 * heatmap)  # 转换到 0-255
 
-    print(f"Grad-CAM image saved at: {save_path}")  # 仅打印保存路径，不显示图像
+    # 5. **应用高斯模糊平滑 heatmap**
+    if blur_ksize > 1:
+        heatmap = cv2.GaussianBlur(heatmap, (blur_ksize, blur_ksize), 0)
+
+    # 6. **伪彩色映射**
+    heatmap_color = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+
+    # 7. **确保 img 和 heatmap 形状匹配**
+    assert img_bgr.shape == heatmap_color.shape, f"Shape mismatch: img {img_bgr.shape}, heatmap {heatmap_color.shape}"
+
+    # 8. **叠加 Grad-CAM 热力图**
+    superimposed_img = cv2.addWeighted(img_bgr, 0.6, heatmap_color, 0.4, 0)
+
+    # 9. **创建保存目录**
+    save_path = os.path.join(save_dir, 'gradcam')
+    os.makedirs(save_path, exist_ok=True)
+
+    # 10. **保存原图和叠加热力图**
+    img_save_path = os.path.join(save_path, f"{p_id}_original.png")
+    gradcam_save_path = os.path.join(save_path, f"{p_id}.png")
+
+    cv2.imwrite(img_save_path, img_uint8)  # 保存原始归一化图像
+    cv2.imwrite(gradcam_save_path, superimposed_img)  # 保存 Grad-CAM 叠加图
+
+    print(f"Original image saved at: {img_save_path}")
+    print(f"Grad-CAM image saved at: {gradcam_save_path}")
 
     return superimposed_img
+
+
 
 
 
@@ -187,11 +220,12 @@ def test(model, dataloader, criterion):
             inputs, bone_ages, gender, chronological_age, p_id, gut, pe, cor = batch
             inputs, gender, chronological_age, gut, pe, cor= Variable(inputs).cuda(), Variable(gender).cuda(), Variable(chronological_age).cuda(), Variable(gut).cuda(), Variable(pe).cuda(), Variable(cor).cuda()
             # 选择目标层：Mixed_7c 是 SIMBA 的最后一个 Inception 层
-            grad_cam = GradCAM(model, model.Mixed_7a) # Mixed_7a
+            grad_cam = GradCAM(model, model.Mixed_5c) # Mixed_7c, Mixed_7a, Mixed_6c, Mixed_6a, Mixed_5c, Conv2d_5a_1x1, Conv2d_4a_3x3, Conv2d_1a_3x3[0]
+            # Conv2d_5a_1x1比较合适多模态的热力图
             
 
             # 生成 Grad-CAM 热力图
-            heatmap = grad_cam.generate_cam(inputs, gender, target_class=0)
+            heatmap = grad_cam.generate_cam(inputs, gender, chronological_age, gut, pe, cor)
             
             # 1. 将 PyTorch Tensor 转换为 NumPy
             img = inputs.squeeze(0).permute(1, 2, 0).cpu().numpy()  # (C, H, W) → (H, W, C)

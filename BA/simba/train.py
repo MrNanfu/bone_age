@@ -48,6 +48,8 @@ parser.add_argument('--use-pe-performance', default=False, action='store_true',
                 help='Train model with pe performance')
 parser.add_argument('--use-correlation', default=False, action='store_true',
                 help='Train model with correlation features')
+parser.add_argument('--use-image', default=False, action='store_true',
+                help='Train model with image')
 
 # Dataloading-related settings
 parser.add_argument('--cropped', default=False, action='store_true',
@@ -121,7 +123,8 @@ net = SIMBA(
     gender_multiplier=args.gender_multiplier,
     use_gut_microbiome=args.use_gut_microbiome,
     use_pe_performance=args.use_pe_performance,
-    use_correlation=args.use_correlation
+    use_correlation=args.use_correlation,
+    use_image=args.use_image
 )
 
 if args.rank == 0:

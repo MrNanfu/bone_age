@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 class SIMBA(nn.Module):
 
-    def __init__(self, num_classes=1, aux_logits=False, transform_input=False, chronological_age=False, gender_multiplier=False, use_gut_microbiome=False, use_pe_performance=False, use_correlation=False):
+    def __init__(self, num_classes=1, aux_logits=False, transform_input=False, chronological_age=False, gender_multiplier=False, use_gut_microbiome=False, use_pe_performance=False, use_correlation=False, use_image=True):
         super(SIMBA, self).__init__()
         # Inception
         self.aux_logits = aux_logits
@@ -17,44 +17,49 @@ class SIMBA(nn.Module):
         self.use_gut_microbiome = use_gut_microbiome
         self.use_pe_performance = use_pe_performance
         self.use_correlation = use_correlation
+        self.use_image = use_image  # 控制是否使用图像
 
-        self.Conv2d_1a_3x3 = nn.ModuleList()
-        self.Conv2d_2a_3x3 = nn.ModuleList()
-        self.Conv2d_2b_3x3 = nn.ModuleList()
-        self.Conv2d_3b_1x1 = nn.ModuleList()
-        self.Conv2d_4a_3x3 = nn.ModuleList()
+        if self.use_image:
+            self.Conv2d_1a_3x3 = nn.ModuleList()
+            self.Conv2d_2a_3x3 = nn.ModuleList()
+            self.Conv2d_2b_3x3 = nn.ModuleList()
+            self.Conv2d_3b_1x1 = nn.ModuleList()
+            self.Conv2d_4a_3x3 = nn.ModuleList()
 
-        for x in range(2):
-            self.Conv2d_1a_3x3.append(BasicConv2d(1, 32, kernel_size=3,
-                                      stride=2, padding=0))
-            self.Conv2d_2a_3x3.append(BasicConv2d(32, 32,
-                                      kernel_size=3))
-            self.Conv2d_2b_3x3.append(BasicConv2d(32, 64, kernel_size=3,
-                                      padding=1))
-            self.Conv2d_3b_1x1.append(BasicConv2d(64, 80,
-                                      kernel_size=1))
-            self.Conv2d_4a_3x3.append(BasicConv2d(80, 192,
-                                      kernel_size=3))
+            for x in range(2):
+                self.Conv2d_1a_3x3.append(BasicConv2d(1, 32, kernel_size=3,
+                                        stride=2, padding=0))
+                self.Conv2d_2a_3x3.append(BasicConv2d(32, 32,
+                                        kernel_size=3))
+                self.Conv2d_2b_3x3.append(BasicConv2d(32, 64, kernel_size=3,
+                                        padding=1))
+                self.Conv2d_3b_1x1.append(BasicConv2d(64, 80,
+                                        kernel_size=1))
+                self.Conv2d_4a_3x3.append(BasicConv2d(80, 192,
+                                        kernel_size=3))
 
-        self.Conv2d_5a_1x1 = BasicConv2d(192*2, 192, kernel_size=1)
+            self.Conv2d_5a_1x1 = BasicConv2d(192*2, 192, kernel_size=1)
 
-        self.Mixed_5b = InceptionA(192, pool_features=32)
-        self.Mixed_5c = InceptionA(256, pool_features=64)
-        self.Mixed_5d = InceptionA(288, pool_features=64)
-        self.Mixed_6a = InceptionB(288)
-        self.Mixed_6b = InceptionC(768, channels_7x7=128)
-        self.Mixed_6c = InceptionC(768, channels_7x7=160)
-        self.Mixed_6d = InceptionC(768, channels_7x7=160)
-        self.Mixed_6e = InceptionC(768, channels_7x7=192)
+            self.Mixed_5b = InceptionA(192, pool_features=32)
+            self.Mixed_5c = InceptionA(256, pool_features=64)
+            self.Mixed_5d = InceptionA(288, pool_features=64)
+            self.Mixed_6a = InceptionB(288)
+            self.Mixed_6b = InceptionC(768, channels_7x7=128)
+            self.Mixed_6c = InceptionC(768, channels_7x7=160)
+            self.Mixed_6d = InceptionC(768, channels_7x7=160)
+            self.Mixed_6e = InceptionC(768, channels_7x7=192)
 
-        if aux_logits:
-            self.AuxLogits = InceptionAux(768, num_classes)
+            if aux_logits:
+                self.AuxLogits = InceptionAux(768, num_classes)
 
-        self.Mixed_7a = InceptionD(768)
-        self.Mixed_7b = InceptionE(1280)
-        self.Mixed_7c = InceptionE(2048)
+            self.Mixed_7a = InceptionD(768)
+            self.Mixed_7b = InceptionE(1280)
+            self.Mixed_7c = InceptionE(2048)
 
-        fc_1_size = 100352
+            fc_1_size = 100352
+        else:
+            fc_1_size = 0  # 不使用图像时初始大小为0
+
         
         # Gender
         if gender_multiplier:
@@ -85,7 +90,7 @@ class SIMBA(nn.Module):
         
         # 相关特征 extractor 层
         if self.use_correlation:
-            self.correlation_extractor = CorrelationFeatureModule(input_dim=20, output_dim=64)
+            self.correlation_extractor = CorrelationFeatureModule(input_dim=19, output_dim=64)
             fc_1_size += 64
 
         self.fc_1 = DenseLayer(fc_1_size, 1000)
@@ -110,46 +115,49 @@ class SIMBA(nn.Module):
     #     self.gradients = grad
 
     def forward(self, x, y, z, gut, pe, cor):
-        if self.transform_input:
-            x_ch0 = torch.unsqueeze(x[:, 0], 1) * (0.229/0.5)+(0.485-0.5) / 0.5
-            x_ch1 = torch.unsqueeze(x[:, 1], 1) * (0.224/0.5)+(0.456-0.5) / 0.5
-            x_ch2 = torch.unsqueeze(x[:, 2], 1) * (0.225/0.5)+(0.406-0.5) / 0.5
-            x = torch.cat((x_ch0, x_ch1, x_ch2), 1)
-        first_block = []
-        x = torch.split(x, 1, dim=1)
-        x = list(x)
-        for index in range(2):
-            into = x[index]
-            into = self.Conv2d_1a_3x3[index](into)
-            into = self.Conv2d_2a_3x3[index](into)
-            into = self.Conv2d_2b_3x3[index](into)
-            into = F.max_pool2d(into, kernel_size=3, stride=2)
-            into = self.Conv2d_3b_1x1[index](into)
-            into = self.Conv2d_4a_3x3[index](into)
-            into = F.max_pool2d(into, kernel_size=3, stride=2)
-            first_block.append(into)
-            #x = into
-        
-        x = torch.cat(first_block, dim=1)
-        x = self.Conv2d_5a_1x1(x)
+        features = [] 
+        if self.use_image:
+            if self.transform_input:
+                x_ch0 = torch.unsqueeze(x[:, 0], 1) * (0.229/0.5)+(0.485-0.5) / 0.5
+                x_ch1 = torch.unsqueeze(x[:, 1], 1) * (0.224/0.5)+(0.456-0.5) / 0.5
+                x_ch2 = torch.unsqueeze(x[:, 2], 1) * (0.225/0.5)+(0.406-0.5) / 0.5
+                x = torch.cat((x_ch0, x_ch1, x_ch2), 1)
+            first_block = []
+            x = torch.split(x, 1, dim=1)
+            x = list(x)
+            for index in range(2):
+                into = x[index]
+                into = self.Conv2d_1a_3x3[index](into)
+                into = self.Conv2d_2a_3x3[index](into)
+                into = self.Conv2d_2b_3x3[index](into)
+                into = F.max_pool2d(into, kernel_size=3, stride=2)
+                into = self.Conv2d_3b_1x1[index](into)
+                into = self.Conv2d_4a_3x3[index](into)
+                into = F.max_pool2d(into, kernel_size=3, stride=2)
+                first_block.append(into)
+                #x = into
+            
+            x = torch.cat(first_block, dim=1)
+            x = self.Conv2d_5a_1x1(x)
 
-        x = self.Mixed_5b(x)
-        x = self.Mixed_5c(x)
-        x = self.Mixed_5d(x)
-        x = self.Mixed_6a(x)
-        x = self.Mixed_6b(x)
-        x = self.Mixed_6c(x)
-        x = self.Mixed_6d(x)
-        x = self.Mixed_6e(x)
-        if self.training and self.aux_logits:
-            aux = self.AuxLogits(x)
-        x = self.Mixed_7a(x)
-        x = self.Mixed_7b(x)
-        x = self.Mixed_7c(x)
-        # h = x.register_hook(self.activations_hook)
-        x = F.avg_pool2d(x, kernel_size=2)
-        x = x.view(x.size(0), -1)
-        features = [x]  # 图像特征 & 性别
+            x = self.Mixed_5b(x)
+            x = self.Mixed_5c(x)
+            x = self.Mixed_5d(x)
+            x = self.Mixed_6a(x)
+            x = self.Mixed_6b(x)
+            x = self.Mixed_6c(x)
+            x = self.Mixed_6d(x)
+            x = self.Mixed_6e(x)
+            if self.training and self.aux_logits:
+                aux = self.AuxLogits(x)
+            x = self.Mixed_7a(x)
+            x = self.Mixed_7b(x)
+            x = self.Mixed_7c(x)
+            # h = x.register_hook(self.activations_hook)
+            x = F.avg_pool2d(x, kernel_size=2)
+            x = x.view(x.size(0), -1)
+            features.append(x)
+        
         
         y = self.gender(y)
         features.append(y)

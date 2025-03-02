@@ -9,7 +9,7 @@ GPUS=0
 # 路径设置
 SSD_LOCATION='/private/workspace/cyt/bone_age_assessment/BA/simba'
 DATASET="KG"
-EXPERIMENT_NAME="best_experiment/"$DATASET/with_only_image_seg_abs # with_only_image with_gender_c_age_cor
+EXPERIMENT_NAME="best_experiment/"$DATASET/with_only_image_seg_abs # with_only_image_seg_abs,  with_gender_c_age_cor_seg
 
 
 DATA_TEST='/private/workspace/cyt/bone_age_assessment/data/data_yuwei/val_clean'  # 测试图像路径
@@ -48,7 +48,8 @@ SAVE_FILE="validation_bestmodel.csv"
 #     --relative-age \
 #     --chronological-age \
 #     --gender-multiplie \
-#     --use-correlation
+#     --use-correlation \
+#     --use-image
 
     CUDA_VISIBLE_DEVICES=$GPUS python visualize.py \
     --data-test $DATA_TEST \
@@ -62,7 +63,7 @@ SAVE_FILE="validation_bestmodel.csv"
     --snapshot $SNAPSHOT \
     --dataset $DATASET \
     --workers $NUM_WORKERS \
-    # --relative-age \
+    --use-image
 
 echo "Testing completed. Results saved in $SAVE_FOLDER/$SAVE_FILE"
 echo "Grad-CAM visualizations saved in $GRADCAM_FOLDER"
