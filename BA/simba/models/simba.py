@@ -56,7 +56,7 @@ class SIMBA(nn.Module):
     
     def _initialize_feature_extractor(self):
         if self.feature_extractor_name == 'inception':
-            model = models.inception_v3(pretrained=True, aux_logits=False)
+            model = models.inception_v3(pretrained=True, aux_logits=True)
             model.fc = nn.Identity()
         elif self.feature_extractor_name == 'resnet':
             model = models.resnet50(pretrained=True)
@@ -92,7 +92,10 @@ class SIMBA(nn.Module):
             if x.shape[1] == 2:  # 检测输入通道数
                 x = torch.cat([x, torch.zeros_like(x[:, :1, :, :])], dim=1)  # 添加全零通道
             x = self.feature_extractor(x)
+            if isinstance(x, tuple):  # 如果是 (output, aux_output)
+                x = x[0]  # 取主输出
             x = x.view(x.size(0), -1)
+
             features.append(x)
         
         y = self.gender(y)

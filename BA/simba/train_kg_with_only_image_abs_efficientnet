@@ -1,0 +1,136 @@
+nohup: ignoring input
+Downloading: "https://download.pytorch.org/models/efficientnet_b0_rwightman-7f5810bc.pth" to /root/.cache/torch/hub/checkpoints/efficientnet_b0_rwightman-7f5810bc.pth
+Argument list to program
+--relative_age False
+--chronological_age False
+--gender_multiplier False
+--use_gut_microbiome False
+--use_pe_performance False
+--use_correlation False
+--use_image True
+--feature_extractor efficientnet
+--cropped False
+--dataset KG
+--data_train /private/workspace/cyt/bone_age_assessment/data/data_yuwei/train_clean
+--heatmaps_train /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_efficientnet/HEATMAPS_TRAIN
+--ann_path_train /private/workspace/cyt/bone_age_assessment/data/data_yuwei/annotations/train_ann.csv
+--rois_path_train /private/workspace/cyt/bone_age_assessment/data/RSNA/annotations/RSNA_Anatomical_ROIs_Training.json
+--data_val /private/workspace/cyt/bone_age_assessment/data/data_yuwei/val_clean
+--heatmaps_val /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_efficientnet/HEATMAPS_VAL
+--ann_path_val /private/workspace/cyt/bone_age_assessment/data/data_yuwei/annotations/val_ann.csv
+--rois_path_val /private/workspace/cyt/bone_age_assessment/data/RSNA/annotations/RSNA_Anatomical_ROIs_Validation.json
+--trainval True
+--save_folder /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_efficientnet
+--snapshot /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_efficientnet/boneage_bonet_snapshot.pth
+--optim_snapshot /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_efficientnet/boneage_bonet_optim.pth
+--eval_first True
+--workers 2
+--batch_size 20
+--epochs 55
+--lr 0.0001
+--patience 2
+--start_epoch 0
+--seed 1111
+--log_interval 30
+--gpu 0
+--rank 0
+
+
+
+  0%|          | 0.00/20.5M [00:00<?, ?B/s]  1%|          | 128k/20.5M [00:00<01:19, 267kB/s]  1%|          | 256k/20.5M [00:00<01:17, 273kB/s]  2%|▏         | 512k/20.5M [00:01<01:18, 266kB/s]  4%|▎         | 768k/20.5M [00:02<01:18, 264kB/s]  5%|▍         | 1.00M/20.5M [00:03<01:17, 264kB/s]  6%|▌         | 1.25M/20.5M [00:04<01:16, 263kB/s]  7%|▋         | 1.50M/20.5M [00:05<01:15, 263kB/s]  9%|▊         | 1.75M/20.5M [00:06<01:14, 263kB/s] 10%|▉         | 2.00M/20.5M [00:07<01:13, 263kB/s] 11%|█         | 2.25M/20.5M [00:08<01:12, 263kB/s] 12%|█▏        | 2.50M/20.5M [00:09<01:11, 262kB/s] 13%|█▎        | 2.75M/20.5M [00:10<01:10, 262kB/s] 15%|█▍        | 3.00M/20.5M [00:11<01:09, 262kB/s] 16%|█▌        | 3.25M/20.5M [00:12<01:08, 262kB/s] 17%|█▋        | 3.50M/20.5M [00:13<01:07, 262kB/s] 18%|█▊        | 3.75M/20.5M [00:14<01:06, 262kB/s] 20%|█▉        | 4.00M/20.5M [00:15<01:05, 262kB/s] 21%|██        | 4.25M/20.5M [00:16<01:04, 262kB/s] 22%|██▏       | 4.50M/20.5M [00:17<01:03, 262kB/s] 23%|██▎       | 4.75M/20.5M [00:18<01:02, 262kB/s] 24%|██▍       | 5.00M/20.5M [00:19<01:01, 262kB/s] 26%|██▌       | 5.25M/20.5M [00:20<01:00, 262kB/s] 27%|██▋       | 5.50M/20.5M [00:21<01:00, 258kB/s] 28%|██▊       | 5.75M/20.5M [00:22<00:59, 259kB/s] 29%|██▉       | 6.00M/20.5M [00:23<00:58, 261kB/s] 31%|███       | 6.25M/20.5M [00:24<00:56, 261kB/s] 32%|███▏      | 6.50M/20.5M [00:25<00:55, 261kB/s] 33%|███▎      | 6.75M/20.5M [00:26<00:54, 262kB/s] 34%|███▍      | 7.00M/20.5M [00:27<00:53, 262kB/s] 35%|███▌      | 7.25M/20.5M [00:28<00:52, 262kB/s] 37%|███▋      | 7.50M/20.5M [00:29<00:51, 263kB/s] 38%|███▊      | 7.75M/20.5M [00:30<00:50, 262kB/s] 39%|███▉      | 8.00M/20.5M [00:31<00:49, 262kB/s] 40%|████      | 8.25M/20.5M [00:32<00:48, 262kB/s] 42%|████▏     | 8.50M/20.5M [00:33<00:47, 262kB/s] 43%|████▎     | 8.75M/20.5M [00:34<00:46, 263kB/s] 44%|████▍     | 9.00M/20.5M [00:35<00:45, 263kB/s] 45%|████▌     | 9.25M/20.5M [00:36<00:44, 263kB/s] 46%|████▋     | 9.50M/20.5M [00:37<00:43, 263kB/s] 48%|████▊     | 9.75M/20.5M [00:38<00:42, 262kB/s] 49%|████▉     | 10.0M/20.5M [00:39<00:41, 262kB/s] 50%|█████     | 10.2M/20.5M [00:40<00:40, 262kB/s] 51%|█████▏    | 10.5M/20.5M [00:41<00:39, 262kB/s] 53%|█████▎    | 10.8M/20.5M [00:42<00:38, 262kB/s] 54%|█████▍    | 11.0M/20.5M [00:43<00:37, 262kB/s] 55%|█████▌    | 11.2M/20.5M [00:44<00:36, 263kB/s] 56%|█████▌    | 11.5M/20.5M [00:45<00:35, 262kB/s] 57%|█████▋    | 11.8M/20.5M [00:46<00:34, 263kB/s] 59%|█████▊    | 12.0M/20.5M [00:47<00:33, 263kB/s] 60%|█████▉    | 12.2M/20.5M [00:48<00:32, 262kB/s] 61%|██████    | 12.4M/20.5M [00:49<00:27, 303kB/s] 61%|██████    | 12.5M/20.5M [00:49<00:33, 251kB/s] 62%|██████▏   | 12.8M/20.5M [00:50<00:31, 255kB/s] 64%|██████▎   | 13.0M/20.5M [00:51<00:30, 258kB/s] 65%|██████▍   | 13.2M/20.5M [00:52<00:29, 259kB/s] 66%|██████▌   | 13.5M/20.5M [00:53<00:28, 260kB/s] 67%|██████▋   | 13.8M/20.5M [00:54<00:26, 261kB/s] 68%|██████▊   | 14.0M/20.5M [00:55<00:25, 261kB/s] 70%|██████▉   | 14.2M/20.5M [00:56<00:24, 261kB/s] 71%|███████   | 14.5M/20.5M [00:57<00:23, 262kB/s] 72%|███████▏  | 14.8M/20.5M [00:58<00:22, 262kB/s] 73%|███████▎  | 15.0M/20.5M [00:59<00:21, 262kB/s] 75%|███████▍  | 15.2M/20.5M [01:00<00:20, 262kB/s] 76%|███████▌  | 15.5M/20.5M [01:01<00:19, 262kB/s] 77%|███████▋  | 15.8M/20.5M [01:02<00:18, 262kB/s] 78%|███████▊  | 16.0M/20.5M [01:03<00:17, 262kB/s] 79%|███████▉  | 16.2M/20.5M [01:04<00:16, 262kB/s] 81%|████████  | 16.5M/20.5M [01:05<00:15, 262kB/s] 82%|████████▏ | 16.8M/20.5M [01:06<00:14, 262kB/s] 83%|████████▎ | 17.0M/20.5M [01:07<00:13, 263kB/s] 84%|████████▍ | 17.2M/20.5M [01:08<00:12, 263kB/s] 86%|████████▌ | 17.5M/20.5M [01:09<00:11, 263kB/s] 87%|████████▋ | 17.8M/20.5M [01:10<00:10, 262kB/s] 88%|████████▊ | 18.0M/20.5M [01:11<00:09, 262kB/s] 89%|████████▉ | 18.2M/20.5M [01:12<00:08, 262kB/s] 90%|█████████ | 18.5M/20.5M [01:13<00:07, 262kB/s] 92%|█████████▏| 18.8M/20.5M [01:14<00:06, 262kB/s] 93%|█████████▎| 19.0M/20.5M [01:15<00:05, 262kB/s] 94%|█████████▍| 19.2M/20.5M [01:16<00:04, 262kB/s] 95%|█████████▌| 19.5M/20.5M [01:17<00:03, 262kB/s] 97%|█████████▋| 19.8M/20.5M [01:18<00:02, 262kB/s] 98%|█████████▊| 20.0M/20.5M [01:19<00:01, 262kB/s] 99%|█████████▉| 20.2M/20.5M [01:20<00:00, 262kB/s]100%|██████████| 20.5M/20.5M [01:21<00:00, 338kB/s]100%|██████████| 20.5M/20.5M [01:21<00:00, 265kB/s]
+---> Number of params: 6322613
+Number of workers:2
+Train begins...
+Relative val loss: 64.61700
+Absolute val loss: 64.61700
+ [    0] (    0/   24) | ms/batch 494.5421 | loss 59.556091 | avg loss 59.556091 | lr 0.0001000
+Relative val loss: 31.37900
+Absolute val loss: 31.37900
+-----------------------------------------------------------------------------------------
+| end of epoch   0 | time:  9.09s | epoch loss 55.424838 |
+-----------------------------------------------------------------------------------------
+ [    1] (    0/   24) | ms/batch 151.4156 | loss 39.503838 | avg loss 39.503838 | lr 0.0001000
+Relative val loss: 10.31741
+Absolute val loss: 10.31741
+-----------------------------------------------------------------------------------------
+| end of epoch   1 | time:  8.76s | epoch loss 22.177284 |
+-----------------------------------------------------------------------------------------
+ [    2] (    0/   24) | ms/batch 195.8406 | loss 11.617956 | avg loss 11.617956 | lr 0.0001000
+Relative val loss: 8.11390
+Absolute val loss: 8.11390
+-----------------------------------------------------------------------------------------
+| end of epoch   2 | time:  9.06s | epoch loss 9.704194 |
+-----------------------------------------------------------------------------------------
+ [    3] (    0/   24) | ms/batch 137.5003 | loss 12.940221 | avg loss 12.940221 | lr 0.0001000
+Relative val loss: 6.75011
+Absolute val loss: 6.75011
+-----------------------------------------------------------------------------------------
+| end of epoch   3 | time:  9.46s | epoch loss 8.836801 |
+-----------------------------------------------------------------------------------------
+ [    4] (    0/   24) | ms/batch 131.5024 | loss 6.463864 | avg loss 6.463864 | lr 0.0001000
+Relative val loss: 7.56681
+Absolute val loss: 7.56681
+-----------------------------------------------------------------------------------------
+| end of epoch   4 | time:  9.13s | epoch loss 8.178928 |
+-----------------------------------------------------------------------------------------
+ [    5] (    0/   24) | ms/batch 129.9214 | loss 6.605535 | avg loss 6.605535 | lr 0.0001000
+Relative val loss: 7.40731
+Absolute val loss: 7.40731
+-----------------------------------------------------------------------------------------
+| end of epoch   5 | time:  9.48s | epoch loss 7.163296 |
+-----------------------------------------------------------------------------------------
+ [    6] (    0/   24) | ms/batch 127.0919 | loss 8.256456 | avg loss 8.256456 | lr 0.0001000
+Relative val loss: 5.63734
+Absolute val loss: 5.63734
+-----------------------------------------------------------------------------------------
+| end of epoch   6 | time:  9.10s | epoch loss 7.236438 |
+-----------------------------------------------------------------------------------------
+ [    7] (    0/   24) | ms/batch 195.4801 | loss 7.584877 | avg loss 7.584877 | lr 0.0001000
+Relative val loss: 6.03541
+Absolute val loss: 6.03541
+-----------------------------------------------------------------------------------------
+| end of epoch   7 | time:  9.24s | epoch loss 7.579507 |
+-----------------------------------------------------------------------------------------
+ [    8] (    0/   24) | ms/batch 195.4677 | loss 7.546640 | avg loss 7.546640 | lr 0.0001000
+Relative val loss: 6.22111
+Absolute val loss: 6.22111
+-----------------------------------------------------------------------------------------
+| end of epoch   8 | time:  9.34s | epoch loss 7.026277 |
+-----------------------------------------------------------------------------------------
+ [    9] (    0/   24) | ms/batch 195.5104 | loss 6.445667 | avg loss 6.445667 | lr 0.0001000
+Relative val loss: 7.91418
+Absolute val loss: 7.91418
+-----------------------------------------------------------------------------------------
+| end of epoch   9 | time:  9.32s | epoch loss 6.292418 |
+-----------------------------------------------------------------------------------------
+ [   10] (    0/   24) | ms/batch 196.0690 | loss 6.612300 | avg loss 6.612300 | lr 0.0001000
+Relative val loss: 6.38349
+Absolute val loss: 6.38349
+-----------------------------------------------------------------------------------------
+| end of epoch  10 | time:  9.28s | epoch loss 6.594945 |
+-----------------------------------------------------------------------------------------
+ [   11] (    0/   24) | ms/batch 174.4304 | loss 4.103212 | avg loss 4.103212 | lr 0.0001000
+Relative val loss: 6.54740
+Absolute val loss: 6.54740
+-----------------------------------------------------------------------------------------
+| end of epoch  11 | time:  9.03s | epoch loss 7.123317 |
+-----------------------------------------------------------------------------------------
+ [   12] (    0/   24) | ms/batch 152.0400 | loss 8.607520 | avg loss 8.607520 | lr 0.0001000
+Relative val loss: 6.26603
+Absolute val loss: 6.26603
+-----------------------------------------------------------------------------------------
+| end of epoch  12 | time:  9.25s | epoch loss 6.148384 |
+-----------------------------------------------------------------------------------------
+ [   13] (    0/   24) | ms/batch 194.5157 | loss 6.257080 | avg loss 6.257080 | lr 0.0001000
+Relative val loss: 5.62213
+Absolute val loss: 5.62213
+-----------------------------------------------------------------------------------------
+| end of epoch  13 | time:  8.87s | epoch loss 6.473538 |
+-----------------------------------------------------------------------------------------
+ [   14] (    0/   24) | ms/batch 161.4518 | loss 5.143869 | avg loss 5.143869 | lr 0.0001000
+Relative val loss: 4.72414
+Absolute val loss: 4.72414
+-----------------------------------------------------------------------------------------
+| end of epoch  14 | time:  9.22s | epoch loss 5.877986 |
+-----------------------------------------------------------------------------------------
+train_net.sh: line 41: 2021233 Killed                  CUDA_VISIBLE_DEVICES=$GPUS python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --use-image --feature-extractor $FEATURE_EXTRACTOR

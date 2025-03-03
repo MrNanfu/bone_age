@@ -1,0 +1,176 @@
+nohup: ignoring input
+Argument list to program
+--relative_age False
+--chronological_age False
+--gender_multiplier False
+--use_gut_microbiome False
+--use_pe_performance False
+--use_correlation False
+--use_image True
+--feature_extractor vgg
+--cropped False
+--dataset KG
+--data_train /private/workspace/cyt/bone_age_assessment/data/data_yuwei/train_clean
+--heatmaps_train /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_vgg/HEATMAPS_TRAIN
+--ann_path_train /private/workspace/cyt/bone_age_assessment/data/data_yuwei/annotations/train_ann.csv
+--rois_path_train /private/workspace/cyt/bone_age_assessment/data/RSNA/annotations/RSNA_Anatomical_ROIs_Training.json
+--data_val /private/workspace/cyt/bone_age_assessment/data/data_yuwei/val_clean
+--heatmaps_val /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_vgg/HEATMAPS_VAL
+--ann_path_val /private/workspace/cyt/bone_age_assessment/data/data_yuwei/annotations/val_ann.csv
+--rois_path_val /private/workspace/cyt/bone_age_assessment/data/RSNA/annotations/RSNA_Anatomical_ROIs_Validation.json
+--trainval True
+--save_folder /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_vgg
+--snapshot /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_vgg/boneage_bonet_snapshot.pth
+--optim_snapshot /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/with_only_image_abs_vgg/boneage_bonet_optim.pth
+--eval_first True
+--workers 2
+--batch_size 20
+--epochs 55
+--lr 0.0001
+--patience 2
+--start_epoch 0
+--seed 1111
+--log_interval 30
+--gpu 0
+--rank 0
+
+
+
+---> Number of params: 40837753
+Number of workers:2
+Train begins...
+Relative val loss: 56.76132
+Absolute val loss: 56.76132
+ [    0] (    0/   24) | ms/batch 491.7636 | loss 59.118572 | avg loss 59.118572 | lr 0.0001000
+Relative val loss: 9.77905
+Absolute val loss: 9.77905
+-----------------------------------------------------------------------------------------
+| end of epoch   0 | time: 11.58s | epoch loss 18.768431 |
+-----------------------------------------------------------------------------------------
+ [    1] (    0/   24) | ms/batch 338.6064 | loss 14.292032 | avg loss 14.292032 | lr 0.0001000
+Relative val loss: 10.66966
+Absolute val loss: 10.66966
+-----------------------------------------------------------------------------------------
+| end of epoch   1 | time: 10.46s | epoch loss 14.596823 |
+-----------------------------------------------------------------------------------------
+ [    2] (    0/   24) | ms/batch 289.2482 | loss 10.604279 | avg loss 10.604279 | lr 0.0001000
+Relative val loss: 10.49845
+Absolute val loss: 10.49845
+-----------------------------------------------------------------------------------------
+| end of epoch   2 | time: 10.91s | epoch loss 12.648993 |
+-----------------------------------------------------------------------------------------
+ [    3] (    0/   24) | ms/batch 339.8743 | loss 15.141380 | avg loss 15.141380 | lr 0.0001000
+Relative val loss: 14.23567
+Absolute val loss: 14.23567
+-----------------------------------------------------------------------------------------
+| end of epoch   3 | time: 11.09s | epoch loss 13.716079 |
+-----------------------------------------------------------------------------------------
+ [    4] (    0/   24) | ms/batch 295.0284 | loss 13.159778 | avg loss 13.159778 | lr 0.0001000
+Relative val loss: 7.86687
+Absolute val loss: 7.86687
+-----------------------------------------------------------------------------------------
+| end of epoch   4 | time: 11.05s | epoch loss 9.859166 |
+-----------------------------------------------------------------------------------------
+ [    5] (    0/   24) | ms/batch 182.8966 | loss 7.429314 | avg loss 7.429314 | lr 0.0001000
+Relative val loss: 9.63790
+Absolute val loss: 9.63790
+-----------------------------------------------------------------------------------------
+| end of epoch   5 | time: 11.02s | epoch loss 8.517676 |
+-----------------------------------------------------------------------------------------
+ [    6] (    0/   24) | ms/batch 339.2112 | loss 11.394549 | avg loss 11.394549 | lr 0.0001000
+Relative val loss: 7.81310
+Absolute val loss: 7.81310
+-----------------------------------------------------------------------------------------
+| end of epoch   6 | time: 10.76s | epoch loss 9.883592 |
+-----------------------------------------------------------------------------------------
+ [    7] (    0/   24) | ms/batch 340.2276 | loss 9.469738 | avg loss 9.469738 | lr 0.0001000
+Relative val loss: 8.88907
+Absolute val loss: 8.88907
+-----------------------------------------------------------------------------------------
+| end of epoch   7 | time: 10.65s | epoch loss 7.572578 |
+-----------------------------------------------------------------------------------------
+ [    8] (    0/   24) | ms/batch 153.5411 | loss 8.732677 | avg loss 8.732677 | lr 0.0001000
+Relative val loss: 15.95608
+Absolute val loss: 15.95608
+-----------------------------------------------------------------------------------------
+| end of epoch   8 | time: 10.86s | epoch loss 7.797684 |
+-----------------------------------------------------------------------------------------
+ [    9] (    0/   24) | ms/batch 300.9584 | loss 10.748386 | avg loss 10.748386 | lr 0.0001000
+Relative val loss: 6.43958
+Absolute val loss: 6.43958
+-----------------------------------------------------------------------------------------
+| end of epoch   9 | time: 11.03s | epoch loss 9.710341 |
+-----------------------------------------------------------------------------------------
+ [   10] (    0/   24) | ms/batch 281.3225 | loss 9.050903 | avg loss 9.050903 | lr 0.0001000
+Relative val loss: 7.79367
+Absolute val loss: 7.79367
+-----------------------------------------------------------------------------------------
+| end of epoch  10 | time: 10.96s | epoch loss 9.125871 |
+-----------------------------------------------------------------------------------------
+ [   11] (    0/   24) | ms/batch 158.2434 | loss 7.171115 | avg loss 7.171115 | lr 0.0001000
+Relative val loss: 15.28731
+Absolute val loss: 15.28731
+-----------------------------------------------------------------------------------------
+| end of epoch  11 | time: 11.01s | epoch loss 9.121621 |
+-----------------------------------------------------------------------------------------
+ [   12] (    0/   24) | ms/batch 339.2470 | loss 9.607867 | avg loss 9.607867 | lr 0.0001000
+Relative val loss: 7.45625
+Absolute val loss: 7.45625
+-----------------------------------------------------------------------------------------
+| end of epoch  12 | time: 10.74s | epoch loss 9.683412 |
+-----------------------------------------------------------------------------------------
+ [   13] (    0/   24) | ms/batch 301.9521 | loss 6.278790 | avg loss 6.278790 | lr 0.0001000
+Relative val loss: 6.11968
+Absolute val loss: 6.11968
+-----------------------------------------------------------------------------------------
+| end of epoch  13 | time: 10.89s | epoch loss 7.163501 |
+-----------------------------------------------------------------------------------------
+ [   14] (    0/   24) | ms/batch 338.7108 | loss 5.054262 | avg loss 5.054262 | lr 0.0001000
+Relative val loss: 6.89870
+Absolute val loss: 6.89870
+-----------------------------------------------------------------------------------------
+| end of epoch  14 | time: 11.29s | epoch loss 7.132353 |
+-----------------------------------------------------------------------------------------
+ [   15] (    0/   24) | ms/batch 303.5848 | loss 11.745868 | avg loss 11.745868 | lr 0.0001000
+Relative val loss: 7.27414
+Absolute val loss: 7.27414
+-----------------------------------------------------------------------------------------
+| end of epoch  15 | time: 10.69s | epoch loss 7.301656 |
+-----------------------------------------------------------------------------------------
+ [   16] (    0/   24) | ms/batch 243.0537 | loss 5.932968 | avg loss 5.932968 | lr 0.0001000
+Relative val loss: 10.12589
+Absolute val loss: 10.12589
+-----------------------------------------------------------------------------------------
+| end of epoch  16 | time: 11.08s | epoch loss 7.892434 |
+-----------------------------------------------------------------------------------------
+ [   17] (    0/   24) | ms/batch 338.6698 | loss 6.174582 | avg loss 6.174582 | lr 0.0001000
+Relative val loss: 5.78443
+Absolute val loss: 5.78443
+-----------------------------------------------------------------------------------------
+| end of epoch  17 | time: 11.21s | epoch loss 7.637852 |
+-----------------------------------------------------------------------------------------
+ [   18] (    0/   24) | ms/batch 336.5490 | loss 8.282294 | avg loss 8.282294 | lr 0.0001000
+Relative val loss: 9.77602
+Absolute val loss: 9.77602
+-----------------------------------------------------------------------------------------
+| end of epoch  18 | time: 10.61s | epoch loss 7.028773 |
+-----------------------------------------------------------------------------------------
+ [   19] (    0/   24) | ms/batch 293.6723 | loss 7.646552 | avg loss 7.646552 | lr 0.0001000
+Relative val loss: 12.36173
+Absolute val loss: 12.36173
+-----------------------------------------------------------------------------------------
+| end of epoch  19 | time: 10.86s | epoch loss 7.114893 |
+-----------------------------------------------------------------------------------------
+ [   20] (    0/   24) | ms/batch 155.7076 | loss 11.489312 | avg loss 11.489312 | lr 0.0001000
+Relative val loss: 5.07573
+Absolute val loss: 5.07573
+-----------------------------------------------------------------------------------------
+| end of epoch  20 | time: 10.96s | epoch loss 7.508298 |
+-----------------------------------------------------------------------------------------
+ [   21] (    0/   24) | ms/batch 244.5962 | loss 8.363477 | avg loss 8.363477 | lr 0.0001000
+Relative val loss: 5.08344
+Absolute val loss: 5.08344
+-----------------------------------------------------------------------------------------
+| end of epoch  21 | time: 11.19s | epoch loss 6.540568 |
+-----------------------------------------------------------------------------------------
+train_net.sh: line 41: 2015788 Killed                  CUDA_VISIBLE_DEVICES=$GPUS python -m train --data-train $DATA_TRAIN --heatmaps-train $HEATMAPS_TRAIN --ann-path-train $ANN_PATH_TRAIN --rois-path-train $ROIS_PATH_TRAIN --data-val $DATA_VAL --heatmaps-val $HEATMAPS_VAL --ann-path-val $ANN_PATH_VAL --rois-path-val $ROIS_PATH_VAL --batch-size $BATCH_SIZE --start-epoch $START_EPOCH --epochs $NUM_EPOCHS --lr $LR --patience $PATIENCE --gpu $GPUS --save-folder $SAVE_FOLDER --dataset $DATASET --workers $NUM_WORKERS --start-epoch $START_EPOCH --snapshot $SNAPSHOT --optim-snapshot $OPTIM_SNAPSHOT --trainval --eval-first --use-image --feature-extractor $FEATURE_EXTRACTOR

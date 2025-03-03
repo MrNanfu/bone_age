@@ -173,17 +173,32 @@ if osp.exists(optim_to_load) and args.rank == 0:
                                              loc: storage))
     
 # Dataloaders
-train_transform = transforms.Compose([transforms.Resize((500, 500)),
-                               transforms.RandomAffine(
-                                   20, translate=(0.2, 0.2),
-                                   scale=(1, 1.2)
-                                ),
-                               transforms.RandomHorizontalFlip(),
-                               transforms.ToTensor()]
-                            )
+if args.feature_extractor == 'vit':
+    train_transform = transforms.Compose([transforms.Resize((224, 224)),
+                                transforms.RandomAffine(
+                                    20, translate=(0.2, 0.2),
+                                    scale=(1, 1.2)
+                                    ),
+                                transforms.RandomHorizontalFlip(),
+                                transforms.ToTensor()]
+                                )
 
-val_transform = transforms.Compose([transforms.Resize((500, 500)),
-                               transforms.ToTensor()]
+    val_transform = transforms.Compose([transforms.Resize((224, 224)),
+                                transforms.ToTensor()]
+                            )  
+else:
+     
+    train_transform = transforms.Compose([transforms.Resize((500, 500)),
+                                transforms.RandomAffine(
+                                    20, translate=(0.2, 0.2),
+                                    scale=(1, 1.2)
+                                    ),
+                                transforms.RandomHorizontalFlip(),
+                                transforms.ToTensor()]
+                                )
+
+    val_transform = transforms.Compose([transforms.Resize((500, 500)),
+                                transforms.ToTensor()]
                             )
 
 if args.trainval:

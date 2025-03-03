@@ -24,7 +24,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 
 # Local imports
-from bone_age_assessment.BA.simba.models.simba_bk import SIMBA
+from models.simba import SIMBA
 from data.data_loader import BoneageDataset as Dataset
 from utils import AverageMeter
 from utils import metric_average
@@ -51,6 +51,9 @@ parser.add_argument('--use-correlation', default=False, action='store_true',
                 help='Train model with correlation features')
 parser.add_argument('--use-image', default=False, action='store_true',
                 help='Train model with image')
+
+parser.add_argument('--feature-extractor', default='resnet', type=str,
+                help='imaage feature extraction')
 
 # Dataloading-related settings
 parser.add_argument('--cropped', default=False, action='store_true',
@@ -114,7 +117,8 @@ net = SIMBA(
     use_gut_microbiome=args.use_gut_microbiome,
     use_pe_performance=args.use_pe_performance,
     use_correlation=args.use_correlation,
-    use_image=args.use_image
+    use_image=args.use_image,
+    feature_extractor=args.feature_extractor
 )
 
 if args.rank == 0:
@@ -141,9 +145,15 @@ net = net.to(device)
 criterion = nn.L1Loss()
 
 
-# Dataloader
-test_transform = transforms.Compose([transforms.Resize((500, 500)),
+if args.feature_extractor == 'vit':
+    # Dataloader
+    test_transform = transforms.Compose([transforms.Resize((224, 224)),
                                transforms.ToTensor()]
+                            )
+else:
+    # Dataloader
+    test_transform = transforms.Compose([transforms.Resize((500, 500)),
+                                transforms.ToTensor()]
                             )
 
 test_dataset = Dataset([args.data_test], [args.heatmaps_test],
@@ -189,6 +199,9 @@ def test(args, net, loader, sampler, criterion, p_dict, relative_age=True, infer
         if type(child) == nn.BatchNorm2d:
             child.track_running_stats = False
     epoch_loss = AverageMeter()
+    epoch_mse = AverageMeter()
+    true_values = []
+    pred_values = []
     with torch.no_grad():
         for i, batch in tqdm(enumerate(test_loader, 0), total=len(test_loader)):
             inputs, bone_ages, gender, chronological_age, p_id, gut, pe, cor = batch
@@ -197,19 +210,35 @@ def test(args, net, loader, sampler, criterion, p_dict, relative_age=True, infer
             outputs = net(inputs, gender, chronological_age,  gut, pe, cor)
             if not inference:
                 if relative_age:
-                    relative_ages = chronological_age.squeeze(1) - bone_ages
-                    loss = criterion(outputs.squeeze(), relative_ages)
+                    predicted_bone_ages = chronological_age.squeeze(1) - outputs.squeeze()
                 else:
-                    loss = criterion(outputs.squeeze(), bone_ages)
-            
+                    predicted_bone_ages = outputs.squeeze()  # 如果输出是骨龄，直接使用
+
+                loss = criterion(predicted_bone_ages, bone_ages)
                 epoch_loss.update(loss)
+                mse = torch.mean((predicted_bone_ages - bone_ages) ** 2)  # MSE 计算
+                epoch_mse.update(mse)
+
+                true_values.append(bone_ages.item())  # 记录真实值
+                pred_values.append(predicted_bone_ages.item())  # 记录预测值
+
             # 存储 ID、真实骨龄、预测骨龄
             p_dict[p_id.item()] = (bone_ages.item(), outputs.item())
     if not inference:
-        loss = metric_average(epoch_loss.avg,'loss')
+        loss = metric_average(epoch_loss.avg, 'loss')
+        mse = metric_average(epoch_mse.avg, 'mse')
+
+        # 计算 R²
+        true_values_tensor = torch.tensor(true_values)
+        pred_values_tensor = torch.tensor(pred_values)
+        ss_total = torch.sum((true_values_tensor - true_values_tensor.mean()) ** 2)
+        ss_residual = torch.sum((true_values_tensor - pred_values_tensor) ** 2)
+        r2 = 1 - ss_residual / ss_total
 
         if args.rank == 0:
-            print('Test loss: {}'.format(loss))
+            print('Test loss (MAE): {}'.format(loss))
+            print('Test MSE: {}'.format(mse))
+            print('Test R²: {:.4f}'.format(r2.item()))
     return p_dict
 
 

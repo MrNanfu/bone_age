@@ -33,6 +33,10 @@ parser.add_argument('--use-correlation', default=False, action='store_true')
 parser.add_argument('--use-image', default=False, action='store_true',
                 help='Train model with image')
 
+
+parser.add_argument('--feature-extractor', default='resnet', type=str,
+                help='imaage feature extraction')
+
 # Dataloading settings
 parser.add_argument('--dataset', default='RSNA', type=str, choices=['RSNA', 'RHPE', 'KG'])
 parser.add_argument('--data-test', default='data/test/images', type=str)
@@ -60,14 +64,16 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 gradcam_folder = os.path.join(args.save_folder, 'gradcam')
 os.makedirs(gradcam_folder, exist_ok=True)
 
-# Load the model
+# Create the network architecture and load the best model
 net = SIMBA(
     chronological_age=args.chronological_age,
     gender_multiplier=args.gender_multiplier,
     use_gut_microbiome=args.use_gut_microbiome,
     use_pe_performance=args.use_pe_performance,
-    use_correlation=args.use_correlation
-).to(device)
+    use_correlation=args.use_correlation,
+    use_image=args.use_image,
+    feature_extractor=args.feature_extractor
+).cuda()
 
 # Load model weights
 if os.path.exists(args.snapshot):
@@ -221,7 +227,8 @@ def test(model, dataloader, criterion):
             inputs, bone_ages, gender, chronological_age, p_id, gut, pe, cor = batch
             inputs, gender, chronological_age, gut, pe, cor= Variable(inputs).cuda(), Variable(gender).cuda(), Variable(chronological_age).cuda(), Variable(gut).cuda(), Variable(pe).cuda(), Variable(cor).cuda()
             # 选择目标层：Mixed_7c 是 SIMBA 的最后一个 Inception 层
-            grad_cam = GradCAM(model, model.Conv2d_3b_1x1[0]) # Mixed_7c, Mixed_7a, Mixed_6c, Mixed_6a, Mixed_5b, Mixed_5c, Conv2d_5a_1x1, Conv2d_4a_3x3[0], Conv2d_1a_3x3[0]
+            target_layer = model.feature_extractor.layer2[0] # layer1[-1]， layer2[-1]， layer3[-1], layer2[0]
+            grad_cam = GradCAM(model, target_layer) # Mixed_7c, Mixed_7a, Mixed_6c, Mixed_6a, Mixed_5b, Mixed_5c, Conv2d_5a_1x1, Conv2d_4a_3x3[0], Conv2d_1a_3x3[0]
             # Conv2d_5a_1x1比较合适多模态的热力图，Mixed_5b以后就没有热力区域了
             
 

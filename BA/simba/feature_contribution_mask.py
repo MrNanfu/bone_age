@@ -103,6 +103,10 @@ def compute_feature_contributions(model, dataloader, device, enabled_features):
         device: 运行设备 ('cuda' 或 'cpu')
         enabled_features: 由 `args` 传入的参与贡献计算的特征列表
     """
+    # ✅ **初始化贡献矩阵**
+    contribution_matrix = {feature: {age_label: 0.0 for age_label in age_labels} for feature in enabled_features}
+    age_counts = {age_label: 0 for age_label in age_labels}  # 记录每个年龄段的数据量
+    
     for i, batch in enumerate(tqdm(dataloader, total=len(dataloader))):
         # **完整加载输入**
         inputs, bone_ages, gender, chronological_age, p_id, gut, pe, cor = batch
@@ -146,7 +150,9 @@ def compute_feature_contributions(model, dataloader, device, enabled_features):
             for feature in enabled_features:
                 contribution_matrix[feature][age_group] = (contribution_matrix[feature][age_group] / total_contribution) * 100  # 归一化到 100%
 
-
+    # **修改 key 名称映射**
+    key_mapping = {"x": "image", "y": "gender", "z": "age", "cor": "correlation_features"}
+    contribution_matrix = {key_mapping.get(k, k): v for k, v in contribution_matrix.items()}
     return contribution_matrix
 
 # **绘制热力图**
@@ -177,3 +183,12 @@ print("🚀 开始计算年龄分段的特征贡献矩阵...")
 contribution_matrix = compute_feature_contributions(model, test_loader, device, enabled_features)
 plot_contribution_matrix(contribution_matrix, args.save_folder)
 print("🎯 任务完成！")
+
+
+
+
+
+
+
+
+

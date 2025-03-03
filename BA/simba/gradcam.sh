@@ -5,11 +5,12 @@ BATCH_SIZE=1
 NUM_WORKERS=4
 NUM_GPUS=1
 GPUS=0
+FEATURE_EXTRACTOR=resnet
 
 # 路径设置
 SSD_LOCATION='/private/workspace/cyt/bone_age_assessment/BA/simba'
 DATASET="KG"
-EXPERIMENT_NAME="best_experiment/"$DATASET/with_gender_c_age_cor_seg_without_rsa # with_only_image_seg_abs,  with_gender_c_age_cor_seg
+EXPERIMENT_NAME="best_experiment/"$DATASET/with_only_image_abs_resnet # with_only_image_seg_abs,  with_gender_c_age_cor_seg
 
 
 DATA_TEST='/private/workspace/cyt/bone_age_assessment/data/data_yuwei/val_clean'  # 测试图像路径
@@ -33,7 +34,7 @@ SNAPSHOT=$SAVE_FOLDER"/boneage_bonet_weights.pth"
 SAVE_FILE="validation_bestmodel.csv"
 
 # 运行骨龄预测测试并生成 Grad-CAM 可视化
-CUDA_VISIBLE_DEVICES=$GPUS python visualize.py \
+CUDA_VISIBLE_DEVICES=$GPUS python gradcam.py \
     --data-test $DATA_TEST \
     --ann-path-test $ANN_PATH_TEST \
     --rois-path-test $ROIS_PATH_TEST \
@@ -45,11 +46,8 @@ CUDA_VISIBLE_DEVICES=$GPUS python visualize.py \
     --snapshot $SNAPSHOT \
     --dataset $DATASET \
     --workers $NUM_WORKERS \
-    --relative-age \
-    --chronological-age \
-    --gender-multiplie \
-    --use-correlation \
-    --use-image
+    --use-image \
+    --feature-extractor $FEATURE_EXTRACTOR
 
     # CUDA_VISIBLE_DEVICES=$GPUS python visualize.py \
     # --data-test $DATA_TEST \

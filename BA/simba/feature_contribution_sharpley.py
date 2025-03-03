@@ -10,7 +10,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 from torchvision import transforms
 import inspect
-from models.simba import SIMBA
+from bone_age_assessment.BA.simba.models.simba_bk import SIMBA
 from data.data_loader import BoneageDataset as Dataset
 
 # 解析参数
