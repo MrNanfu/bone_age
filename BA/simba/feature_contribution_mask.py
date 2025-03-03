@@ -25,6 +25,9 @@ parser.add_argument('--batch-size', default=1, type=int)
 parser.add_argument('--workers', default=4, type=int)
 parser.add_argument('--gpu', type=str, default='0')
 
+parser.add_argument('--feature-extractor', default='resnet', type=str,
+                help='imaage feature extraction')
+
 # **动态多模态选择（用于计算贡献矩阵）**
 parser.add_argument('--relative-age', default=False, action='store_true')
 parser.add_argument('--chronological-age', default=False, action='store_true')
@@ -35,19 +38,22 @@ parser.add_argument('--use-pe-performance', action='store_true')
 parser.add_argument('--use-correlation', action='store_true')
 
 args = parser.parse_args()
+print(args)
 
 # 设备设置
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
 # 加载模型
+# Create the network architecture and load the best model
 model = SIMBA(
     chronological_age=args.chronological_age,
     gender_multiplier=args.gender_multiplier,
     use_gut_microbiome=args.use_gut_microbiome,
     use_pe_performance=args.use_pe_performance,
     use_correlation=args.use_correlation,
-    use_image=args.use_image
+    use_image=args.use_image,
+    feature_extractor=args.feature_extractor
 ).to(device)
 
 if os.path.exists(args.snapshot):

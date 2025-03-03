@@ -24,7 +24,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 
 # Local imports
-from models.simba import SIMBA
+from bone_age_assessment.BA.simba.models.simba_bk import SIMBA
 from data.data_loader import BoneageDataset as Dataset
 from utils import AverageMeter
 from utils import metric_average

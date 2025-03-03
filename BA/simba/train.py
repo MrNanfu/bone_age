@@ -51,6 +51,9 @@ parser.add_argument('--use-correlation', default=False, action='store_true',
 parser.add_argument('--use-image', default=False, action='store_true',
                 help='Train model with image')
 
+parser.add_argument('--feature-extractor', default='resnet', type=str,
+                help='imaage feature extraction')
+
 # Dataloading-related settings
 parser.add_argument('--cropped', default=False, action='store_true',
                 help='Train model with cropped images according to bbox')
@@ -124,7 +127,8 @@ net = SIMBA(
     use_gut_microbiome=args.use_gut_microbiome,
     use_pe_performance=args.use_pe_performance,
     use_correlation=args.use_correlation,
-    use_image=args.use_image
+    use_image=args.use_image,
+    feature_extractor=args.feature_extractor
 )
 
 if args.rank == 0:
