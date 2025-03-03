@@ -36,9 +36,9 @@ from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 
 def get_args():
     parser = argparse.ArgumentParser('MAE visualization reconstruction script', add_help=False)
-    parser.add_argument('img_path', type=str, help='input image path')
-    parser.add_argument('save_path', type=str, help='save image path')
-    parser.add_argument('model_path', type=str, help='checkpoint path of model')
+    parser.add_argument('--img_path', type=str, help='input image path')
+    parser.add_argument('--save_path', type=str, help='save image path')
+    parser.add_argument('--model_path', type=str, help='checkpoint path of model')
 
     parser.add_argument('--input_size', default=224, type=int,
                         help='images input size for backbone')
@@ -81,7 +81,7 @@ def main(args):
     args.patch_size = patch_size
 
     model.to(device)
-    checkpoint = torch.load(args.model_path, map_location='cpu')
+    checkpoint = torch.load(args.model_path, map_location='cpu', weights_only=False)
     model.load_state_dict(checkpoint['model'])
     model.eval()
 
