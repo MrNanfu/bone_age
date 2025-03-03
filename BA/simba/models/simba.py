@@ -114,7 +114,7 @@ class SIMBA(nn.Module):
     # def activations_hook(self, grad):
     #     self.gradients = grad
 
-    def forward(self, x, y, z, gut, pe, cor):
+    def forward(self, x=None, y=None, z=None, gut=None, pe=None, cor=None):
         features = [] 
         if self.use_image:
             if self.transform_input:

@@ -123,7 +123,8 @@ class GradCAM:
             output = output[0]
 
         # class_score = output[:, target_class]  # 获取目标类别的预测值
-        class_score = output.mean()
+        # class_score = output.mean()
+        class_score = output[:, 0]  # 取第一个通道的输出作为目标
         class_score.backward()  # 计算梯度
 
         # 计算 Grad-CAM 权重
@@ -145,7 +146,7 @@ import os
 import cv2
 import numpy as np
 
-def apply_heatmap(img, heatmap, save_dir, p_id, blur_ksize=7):
+def apply_heatmap(img, heatmap, save_dir, p_id, blur_ksize=5):
     """
     叠加 Grad-CAM 热力图并保存，同时保存原始归一化图像
     
@@ -220,8 +221,8 @@ def test(model, dataloader, criterion):
             inputs, bone_ages, gender, chronological_age, p_id, gut, pe, cor = batch
             inputs, gender, chronological_age, gut, pe, cor= Variable(inputs).cuda(), Variable(gender).cuda(), Variable(chronological_age).cuda(), Variable(gut).cuda(), Variable(pe).cuda(), Variable(cor).cuda()
             # 选择目标层：Mixed_7c 是 SIMBA 的最后一个 Inception 层
-            grad_cam = GradCAM(model, model.Mixed_5c) # Mixed_7c, Mixed_7a, Mixed_6c, Mixed_6a, Mixed_5c, Conv2d_5a_1x1, Conv2d_4a_3x3, Conv2d_1a_3x3[0]
-            # Conv2d_5a_1x1比较合适多模态的热力图
+            grad_cam = GradCAM(model, model.Conv2d_3b_1x1[0]) # Mixed_7c, Mixed_7a, Mixed_6c, Mixed_6a, Mixed_5b, Mixed_5c, Conv2d_5a_1x1, Conv2d_4a_3x3[0], Conv2d_1a_3x3[0]
+            # Conv2d_5a_1x1比较合适多模态的热力图，Mixed_5b以后就没有热力区域了
             
 
             # 生成 Grad-CAM 热力图
