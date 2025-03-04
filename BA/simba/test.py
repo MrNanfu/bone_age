@@ -41,6 +41,8 @@ parser.add_argument('--relative-age', default=False, action='store_true',
                 help='Train model with relative age')
 parser.add_argument('--chronological-age', default=False, action='store_true',
                 help='Train model with chronological age multiplier')
+parser.add_argument('--use-gender', default=False, action='store_true',
+                help='Train model with gender')
 parser.add_argument('--gender-multiplier', default=False, action='store_true',
                 help='Train model with gender multiplier')
 parser.add_argument('--use-gut-microbiome', default=False, action='store_true',
@@ -113,6 +115,7 @@ if not os.path.exists(os.path.join(args.save_folder, 'inference')):
 # Create the network architecture and load the best model
 net = SIMBA(
     chronological_age=args.chronological_age,
+    use_gender=args.use_gender,
     gender_multiplier=args.gender_multiplier,
     use_gut_microbiome=args.use_gut_microbiome,
     use_pe_performance=args.use_pe_performance,
@@ -120,6 +123,10 @@ net = SIMBA(
     use_image=args.use_image,
     feature_extractor=args.feature_extractor
 )
+
+print(net)
+
+
 
 if args.rank == 0:
     print('---> Number of params: {}'.format(

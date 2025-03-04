@@ -4,11 +4,12 @@ import torch.nn.functional as F
 from torchvision import models
 
 class SIMBA(nn.Module):
-    def __init__(self, num_classes=1, feature_extractor='inception', aux_logits=False, transform_input=False, chronological_age=False, gender_multiplier=False, use_gut_microbiome=False, use_pe_performance=False, use_correlation=False, use_image=True):
+    def __init__(self, num_classes=1, feature_extractor='resnet', aux_logits=False, transform_input=False, chronological_age=False, gender_multiplier=False, use_gender=False, use_gut_microbiome=False, use_pe_performance=False, use_correlation=False, use_image=True):
         super(SIMBA, self).__init__()
         self.aux_logits = aux_logits
         self.transform_input = transform_input
         self.chronological_age = chronological_age
+        self.use_gender = use_gender
         self.gender_multiplier = gender_multiplier
         self.use_gut_microbiome = use_gut_microbiome
         self.use_pe_performance = use_pe_performance
@@ -21,14 +22,14 @@ class SIMBA(nn.Module):
             feature_dim = self._get_feature_dim()
         else:
             feature_dim = 0  # 不使用图像时初始大小为0
-
-        # Gender
-        if gender_multiplier:
-            self.gender = Multiplier(1)
-            feature_dim += 1
-        else:
-            self.gender = DenseLayer(1, 32)
-            feature_dim += 32
+        if self.use_gender:
+            # Gender
+            if gender_multiplier:
+                self.gender = Multiplier(1)
+                feature_dim += 1
+            else:
+                self.gender = DenseLayer(1, 32)
+                feature_dim += 32
 
         # Chronological Age
         if chronological_age:
@@ -37,7 +38,7 @@ class SIMBA(nn.Module):
         
         # 肠道菌群 extractor 层
         if self.use_gut_microbiome:
-            self.gut_extractor = GutMicrobiomeModule(input_dim=48, output_dim=128)
+            self.gut_extractor = GutMicrobiomeModule(input_dim=46, output_dim=128)
             feature_dim += 128
             
         # 运动表现 extractor 层
@@ -97,9 +98,9 @@ class SIMBA(nn.Module):
             x = x.view(x.size(0), -1)
 
             features.append(x)
-        
-        y = self.gender(y)
-        features.append(y)
+        if self.use_gender:
+            y = self.gender(y)
+            features.append(y)
         
         if self.chronological_age:
             z = self.chronological(z)

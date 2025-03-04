@@ -10,7 +10,7 @@ FEATURE_EXTRACTOR=resnet
 # 路径设置
 SSD_LOCATION='/private/workspace/cyt/bone_age_assessment/BA/simba'
 DATASET="KG"
-EXPERIMENT_NAME="best_experiment/"$DATASET/with_gender_abs_resnet # with_gender_c_age_cor_seg_without_rsa_resnetg
+EXPERIMENT_NAME="best_experiment/"$DATASET/with_gender_c_age_pe_gut_cor_relative_resnet # with_gender_c_age_relative_resnet, with_gut_pe_abs_resnet, with_pe_gut_cor_abs_resnet, with_gender_c_age_pe_gut_cor_relative_resnet
 
 
 DATA_TEST='/private/workspace/cyt/bone_age_assessment/data/data_yuwei/val_clean'  # 测试图像路径
@@ -33,7 +33,127 @@ SNAPSHOT=$SAVE_FOLDER"/boneage_bonet_weights.pth"
 # 输出文件
 SAVE_FILE="validation_bestmodel.csv"
 
-# 运行骨龄预测测试并生成 Grad-CAM 可视化
+# # image + c_age
+# CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_mask.py \
+#     --data-test $DATA_TEST \
+#     --ann-path-test $ANN_PATH_TEST \
+#     --rois-path-test $ROIS_PATH_TEST \
+#     --heatmaps-test $HEATMAPS_TEST \
+#     --batch-size $BATCH_SIZE \
+#     --gpu $GPUS \
+#     --save-folder $CONTRIBUTION_FOLDER \
+#     --snapshot $SNAPSHOT \
+#     --dataset $DATASET \
+#     --workers $NUM_WORKERS \
+#     --use-image \
+#     --chronological-age \
+#     --relative-age \
+#     --feature-extractor $FEATURE_EXTRACTOR
+
+# # image + pe
+# CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_mask.py \
+#     --data-test $DATA_TEST \
+#     --ann-path-test $ANN_PATH_TEST \
+#     --rois-path-test $ROIS_PATH_TEST \
+#     --heatmaps-test $HEATMAPS_TEST \
+#     --batch-size $BATCH_SIZE \
+#     --gpu $GPUS \
+#     --save-folder $CONTRIBUTION_FOLDER \
+#     --snapshot $SNAPSHOT \
+#     --dataset $DATASET \
+#     --workers $NUM_WORKERS \
+#     --use-image \
+#     --use-pe-performance \
+#     --feature-extractor $FEATURE_EXTRACTOR
+
+# # image + gut
+# CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_mask.py \
+#     --data-test $DATA_TEST \
+#     --ann-path-test $ANN_PATH_TEST \
+#     --rois-path-test $ROIS_PATH_TEST \
+#     --heatmaps-test $HEATMAPS_TEST \
+#     --batch-size $BATCH_SIZE \
+#     --gpu $GPUS \
+#     --save-folder $CONTRIBUTION_FOLDER \
+#     --snapshot $SNAPSHOT \
+#     --dataset $DATASET \
+#     --workers $NUM_WORKERS \
+#     --use-image \
+#     --use-gut-microbiome \
+#     --feature-extractor $FEATURE_EXTRACTOR
+
+# # image + cor
+# CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_mask.py \
+#     --data-test $DATA_TEST \
+#     --ann-path-test $ANN_PATH_TEST \
+#     --rois-path-test $ROIS_PATH_TEST \
+#     --heatmaps-test $HEATMAPS_TEST \
+#     --batch-size $BATCH_SIZE \
+#     --gpu $GPUS \
+#     --save-folder $CONTRIBUTION_FOLDER \
+#     --snapshot $SNAPSHOT \
+#     --dataset $DATASET \
+#     --workers $NUM_WORKERS \
+#     --use-image \
+#     --use-correlation \
+#     # --use-gender \
+#     --feature-extractor $FEATURE_EXTRACTOR
+
+# # image + c_age + gender
+# CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_mask.py \
+#     --data-test $DATA_TEST \
+#     --ann-path-test $ANN_PATH_TEST \
+#     --rois-path-test $ROIS_PATH_TEST \
+#     --heatmaps-test $HEATMAPS_TEST \
+#     --batch-size $BATCH_SIZE \
+#     --gpu $GPUS \
+#     --save-folder $CONTRIBUTION_FOLDER \
+#     --snapshot $SNAPSHOT \
+#     --dataset $DATASET \
+#     --workers $NUM_WORKERS \
+#     --use-image \
+#     --chronological-age \
+#     --relative-age \
+#     --use-gender \
+#     --gender-multiplier \
+#     --feature-extractor $FEATURE_EXTRACTOR
+
+# # image + gut + pe
+# CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_mask.py \
+#     --data-test $DATA_TEST \
+#     --ann-path-test $ANN_PATH_TEST \
+#     --rois-path-test $ROIS_PATH_TEST \
+#     --heatmaps-test $HEATMAPS_TEST \
+#     --batch-size $BATCH_SIZE \
+#     --gpu $GPUS \
+#     --save-folder $CONTRIBUTION_FOLDER \
+#     --snapshot $SNAPSHOT \
+#     --dataset $DATASET \
+#     --workers $NUM_WORKERS \
+#     --use-image \
+#     --use-gut-microbiome \
+#     --use-pe-performance \
+#     --feature-extractor $FEATURE_EXTRACTOR
+
+# # image + cor + gut + pe
+# CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_mask.py \
+#     --data-test $DATA_TEST \
+#     --ann-path-test $ANN_PATH_TEST \
+#     --rois-path-test $ROIS_PATH_TEST \
+#     --heatmaps-test $HEATMAPS_TEST \
+#     --batch-size $BATCH_SIZE \
+#     --gpu $GPUS \
+#     --save-folder $CONTRIBUTION_FOLDER \
+#     --snapshot $SNAPSHOT \
+#     --dataset $DATASET \
+#     --workers $NUM_WORKERS \
+#     --use-image \
+#     --use-gut-microbiome \
+#     --use-pe-performance \
+#     --use-correlation \
+#     --feature-extractor $FEATURE_EXTRACTOR
+
+# image + cor + gut + pe
 CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_mask.py \
     --data-test $DATA_TEST \
     --ann-path-test $ANN_PATH_TEST \
@@ -45,41 +165,15 @@ CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_mask.py \
     --snapshot $SNAPSHOT \
     --dataset $DATASET \
     --workers $NUM_WORKERS \
-    --gender-multiplie \
     --use-image \
+    --use-gut-microbiome \
+    --use-pe-performance \
+    --use-correlation \
+    --chronological-age \
+    --relative-age \
+    --use-gender \
+    --gender-multiplier \
     --feature-extractor $FEATURE_EXTRACTOR
-
-# # 运行骨龄预测测试并生成 Grad-CAM 可视化
-# CUDA_VISIBLE_DEVICES=$GPUS python feature_contribution_sharpley.py \
-#     --data-test $DATA_TEST \
-#     --ann-path-test $ANN_PATH_TEST \
-#     --rois-path-test $ROIS_PATH_TEST \
-#     --heatmaps-test $HEATMAPS_TEST \
-#     --batch-size $BATCH_SIZE \
-#     --gpu $GPUS \
-#     --save-folder $CONTRIBUTION_FOLDER \
-#     --snapshot $SNAPSHOT \
-#     --dataset $DATASET \
-#     --workers $NUM_WORKERS \
-#     --relative-age \
-#     --chronological-age \
-#     --gender-multiplie \
-#     --use-correlation \
-#     --use-image
-
-    # CUDA_VISIBLE_DEVICES=$GPUS python visualize.py \
-    # --data-test $DATA_TEST \
-    # --ann-path-test $ANN_PATH_TEST \
-    # --rois-path-test $ROIS_PATH_TEST \
-    # --heatmaps-test $HEATMAPS_TEST \
-    # --batch-size $BATCH_SIZE \
-    # --gpu $GPUS \
-    # --save-folder $SAVE_FOLDER \
-    # --save-file $SAVE_FILE \
-    # --snapshot $SNAPSHOT \
-    # --dataset $DATASET \
-    # --workers $NUM_WORKERS \
-    # --use-image
 
 echo "Testing completed. Results saved in $SAVE_FOLDER/$SAVE_FILE"
 echo "feature contributions visualizations saved in $CONTRIBUTION_FOLDER"

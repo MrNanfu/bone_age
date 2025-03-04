@@ -1,0 +1,1171 @@
+nohup: ignoring input
+Argument list to program
+--relative_age False
+--use_gender False
+--chronological_age False
+--gender_multiplier False
+--use_gut_microbiome True
+--use_pe_performance True
+--use_correlation True
+--use_image True
+--feature_extractor resnet
+--cropped False
+--dataset KG
+--data_train /private/workspace/cyt/bone_age_assessment/data/data_yuwei/train_clean
+--heatmaps_train /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/train_kg_with_pe_gut_cor_abs_resnet/HEATMAPS_TRAIN
+--ann_path_train /private/workspace/cyt/bone_age_assessment/data/data_yuwei/annotations/train_ann.csv
+--rois_path_train /private/workspace/cyt/bone_age_assessment/data/RSNA/annotations/RSNA_Anatomical_ROIs_Training.json
+--data_val /private/workspace/cyt/bone_age_assessment/data/data_yuwei/val_clean
+--heatmaps_val /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/train_kg_with_pe_gut_cor_abs_resnet/HEATMAPS_VAL
+--ann_path_val /private/workspace/cyt/bone_age_assessment/data/data_yuwei/annotations/val_ann.csv
+--rois_path_val /private/workspace/cyt/bone_age_assessment/data/RSNA/annotations/RSNA_Anatomical_ROIs_Validation.json
+--trainval True
+--save_folder /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/train_kg_with_pe_gut_cor_abs_resnet
+--snapshot /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/train_kg_with_pe_gut_cor_abs_resnet/boneage_bonet_snapshot.pth
+--optim_snapshot /private/workspace/cyt/bone_age_assessment/BA/simba/experiments/best_experiment/KG/train_kg_with_pe_gut_cor_abs_resnet/boneage_bonet_optim.pth
+--eval_first True
+--workers 2
+--batch_size 20
+--epochs 150
+--lr 0.0001
+--patience 2
+--start_epoch 0
+--seed 1111
+--log_interval 30
+--gpu 0
+--rank 0
+
+
+
+SIMBA(
+  (feature_extractor): ResNet(
+    (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+    (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+    (layer1): Sequential(
+      (0): Bottleneck(
+        (conv1): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (downsample): Sequential(
+          (0): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): Bottleneck(
+        (conv1): Conv2d(256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+      (2): Bottleneck(
+        (conv1): Conv2d(256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+    )
+    (layer2): Sequential(
+      (0): Bottleneck(
+        (conv1): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (downsample): Sequential(
+          (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): Bottleneck(
+        (conv1): Conv2d(512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+      (2): Bottleneck(
+        (conv1): Conv2d(512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+      (3): Bottleneck(
+        (conv1): Conv2d(512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+    )
+    (layer3): Sequential(
+      (0): Bottleneck(
+        (conv1): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (downsample): Sequential(
+          (0): Conv2d(512, 1024, kernel_size=(1, 1), stride=(2, 2), bias=False)
+          (1): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): Bottleneck(
+        (conv1): Conv2d(1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+      (2): Bottleneck(
+        (conv1): Conv2d(1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+      (3): Bottleneck(
+        (conv1): Conv2d(1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+      (4): Bottleneck(
+        (conv1): Conv2d(1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+      (5): Bottleneck(
+        (conv1): Conv2d(1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+    )
+    (layer4): Sequential(
+      (0): Bottleneck(
+        (conv1): Conv2d(1024, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (downsample): Sequential(
+          (0): Conv2d(1024, 2048, kernel_size=(1, 1), stride=(2, 2), bias=False)
+          (1): BatchNorm2d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): Bottleneck(
+        (conv1): Conv2d(2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+      (2): Bottleneck(
+        (conv1): Conv2d(2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv3): Conv2d(512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn3): BatchNorm2d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+      )
+    )
+    (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+    (fc): Identity()
+  )
+  (gut_extractor): GutMicrobiomeModule(
+    (fc1): Linear(in_features=46, out_features=64, bias=True)
+    (bn1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (fc2): Linear(in_features=64, out_features=64, bias=True)
+    (bn2): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (fc3): Linear(in_features=64, out_features=128, bias=True)
+    (dropout): Dropout(p=0.3, inplace=False)
+    (relu): ReLU()
+    (attention): MultiheadAttention(
+      (out_proj): NonDynamicallyQuantizableLinear(in_features=128, out_features=128, bias=True)
+    )
+  )
+  (pe_extractor): PhysicalPerformanceModule(
+    (conv1): Conv1d(1, 8, kernel_size=(3,), stride=(1,), padding=(1,))
+    (conv2): Conv1d(8, 16, kernel_size=(3,), stride=(1,), padding=(1,))
+    (fc1): Linear(in_features=96, out_features=16, bias=True)
+    (bn1): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (fc2): Linear(in_features=16, out_features=32, bias=True)
+    (dropout): Dropout(p=0.3, inplace=False)
+    (relu): ReLU()
+    (attention): MultiheadAttention(
+      (out_proj): NonDynamicallyQuantizableLinear(in_features=32, out_features=32, bias=True)
+    )
+  )
+  (correlation_extractor): CorrelationFeatureModule(
+    (fc1): Linear(in_features=19, out_features=32, bias=True)
+    (bn1): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (fc2): Linear(in_features=32, out_features=64, bias=True)
+    (bn2): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (dropout): Dropout(p=0.3, inplace=False)
+    (relu): ReLU()
+    (attention): MultiheadAttention(
+      (out_proj): NonDynamicallyQuantizableLinear(in_features=64, out_features=64, bias=True)
+    )
+  )
+  (fc_1): DenseLayer(
+    (linear): Linear(in_features=2272, out_features=1000, bias=True)
+  )
+  (fc_2): DenseLayer(
+    (linear): Linear(in_features=1000, out_features=1000, bias=True)
+  )
+  (fc_3): Linear(in_features=1000, out_features=1, bias=True)
+)
+---> Number of params: 26891193
+Number of workers:2
+Train begins...
+Relative val loss: 56.11537
+Absolute val loss: 56.11537
+ [    0] (    0/   24) | ms/batch 187.1021 | loss 63.754677 | avg loss 63.754677 | lr 0.0001000
+Relative val loss: 13.88825
+Absolute val loss: 13.88825
+-----------------------------------------------------------------------------------------
+| end of epoch   0 | time:  9.10s | epoch loss 48.143456 |
+-----------------------------------------------------------------------------------------
+ [    1] (    0/   24) | ms/batch 111.0995 | loss 24.932856 | avg loss 24.932856 | lr 0.0001000
+Relative val loss: 9.53319
+Absolute val loss: 9.53319
+-----------------------------------------------------------------------------------------
+| end of epoch   1 | time:  9.23s | epoch loss 12.720641 |
+-----------------------------------------------------------------------------------------
+ [    2] (    0/   24) | ms/batch 207.5579 | loss 7.693714 | avg loss 7.693714 | lr 0.0001000
+Relative val loss: 14.83870
+Absolute val loss: 14.83870
+-----------------------------------------------------------------------------------------
+| end of epoch   2 | time:  9.04s | epoch loss 7.718560 |
+-----------------------------------------------------------------------------------------
+ [    3] (    0/   24) | ms/batch 110.8165 | loss 12.737275 | avg loss 12.737275 | lr 0.0001000
+Relative val loss: 7.79739
+Absolute val loss: 7.79739
+-----------------------------------------------------------------------------------------
+| end of epoch   3 | time:  8.47s | epoch loss 7.850240 |
+-----------------------------------------------------------------------------------------
+ [    4] (    0/   24) | ms/batch 159.3170 | loss 5.601899 | avg loss 5.601899 | lr 0.0001000
+Relative val loss: 9.72254
+Absolute val loss: 9.72254
+-----------------------------------------------------------------------------------------
+| end of epoch   4 | time:  8.70s | epoch loss 6.590866 |
+-----------------------------------------------------------------------------------------
+ [    5] (    0/   24) | ms/batch 193.1341 | loss 6.190004 | avg loss 6.190004 | lr 0.0001000
+Relative val loss: 10.02946
+Absolute val loss: 10.02946
+-----------------------------------------------------------------------------------------
+| end of epoch   5 | time:  9.27s | epoch loss 7.054801 |
+-----------------------------------------------------------------------------------------
+ [    6] (    0/   24) | ms/batch 214.9673 | loss 7.451974 | avg loss 7.451974 | lr 0.0001000
+Relative val loss: 5.98181
+Absolute val loss: 5.98181
+-----------------------------------------------------------------------------------------
+| end of epoch   6 | time:  9.47s | epoch loss 6.738240 |
+-----------------------------------------------------------------------------------------
+ [    7] (    0/   24) | ms/batch 110.9679 | loss 6.359765 | avg loss 6.359765 | lr 0.0001000
+Relative val loss: 6.51304
+Absolute val loss: 6.51304
+-----------------------------------------------------------------------------------------
+| end of epoch   7 | time:  8.98s | epoch loss 6.957057 |
+-----------------------------------------------------------------------------------------
+ [    8] (    0/   24) | ms/batch 222.7671 | loss 7.475150 | avg loss 7.475150 | lr 0.0001000
+Relative val loss: 6.23040
+Absolute val loss: 6.23040
+-----------------------------------------------------------------------------------------
+| end of epoch   8 | time:  9.21s | epoch loss 6.730544 |
+-----------------------------------------------------------------------------------------
+ [    9] (    0/   24) | ms/batch 210.2726 | loss 6.271511 | avg loss 6.271511 | lr 0.0001000
+Relative val loss: 7.30591
+Absolute val loss: 7.30591
+-----------------------------------------------------------------------------------------
+| end of epoch   9 | time:  9.01s | epoch loss 6.619576 |
+-----------------------------------------------------------------------------------------
+ [   10] (    0/   24) | ms/batch 204.5956 | loss 4.787920 | avg loss 4.787920 | lr 0.0001000
+Relative val loss: 6.58711
+Absolute val loss: 6.58711
+-----------------------------------------------------------------------------------------
+| end of epoch  10 | time:  8.99s | epoch loss 6.652474 |
+-----------------------------------------------------------------------------------------
+ [   11] (    0/   24) | ms/batch 189.7066 | loss 5.980073 | avg loss 5.980073 | lr 0.0001000
+Relative val loss: 7.71918
+Absolute val loss: 7.71918
+-----------------------------------------------------------------------------------------
+| end of epoch  11 | time:  9.37s | epoch loss 6.247934 |
+-----------------------------------------------------------------------------------------
+ [   12] (    0/   24) | ms/batch 223.7642 | loss 4.814922 | avg loss 4.814922 | lr 0.0001000
+Relative val loss: 5.65125
+Absolute val loss: 5.65125
+-----------------------------------------------------------------------------------------
+| end of epoch  12 | time:  8.84s | epoch loss 6.404174 |
+-----------------------------------------------------------------------------------------
+ [   13] (    0/   24) | ms/batch 111.0389 | loss 5.874481 | avg loss 5.874481 | lr 0.0001000
+Relative val loss: 5.08953
+Absolute val loss: 5.08953
+-----------------------------------------------------------------------------------------
+| end of epoch  13 | time:  9.15s | epoch loss 6.166136 |
+-----------------------------------------------------------------------------------------
+ [   14] (    0/   24) | ms/batch 200.1400 | loss 4.327167 | avg loss 4.327167 | lr 0.0001000
+Relative val loss: 9.11855
+Absolute val loss: 9.11855
+-----------------------------------------------------------------------------------------
+| end of epoch  14 | time:  9.17s | epoch loss 6.357655 |
+-----------------------------------------------------------------------------------------
+ [   15] (    0/   24) | ms/batch 110.8615 | loss 7.347652 | avg loss 7.347652 | lr 0.0001000
+Relative val loss: 5.77824
+Absolute val loss: 5.77824
+-----------------------------------------------------------------------------------------
+| end of epoch  15 | time:  8.96s | epoch loss 6.019253 |
+-----------------------------------------------------------------------------------------
+ [   16] (    0/   24) | ms/batch 133.3060 | loss 5.203511 | avg loss 5.203511 | lr 0.0001000
+Relative val loss: 6.18721
+Absolute val loss: 6.18721
+-----------------------------------------------------------------------------------------
+| end of epoch  16 | time:  9.18s | epoch loss 6.051890 |
+-----------------------------------------------------------------------------------------
+ [   17] (    0/   24) | ms/batch 328.6171 | loss 4.719953 | avg loss 4.719953 | lr 0.0001000
+Relative val loss: 5.59067
+Absolute val loss: 5.59067
+-----------------------------------------------------------------------------------------
+| end of epoch  17 | time: 10.27s | epoch loss 5.791782 |
+-----------------------------------------------------------------------------------------
+ [   18] (    0/   24) | ms/batch 181.1759 | loss 7.194606 | avg loss 7.194606 | lr 0.0001000
+Relative val loss: 9.65106
+Absolute val loss: 9.65106
+-----------------------------------------------------------------------------------------
+| end of epoch  18 | time: 10.70s | epoch loss 7.228362 |
+-----------------------------------------------------------------------------------------
+ [   19] (    0/   24) | ms/batch 241.5702 | loss 4.805358 | avg loss 4.805358 | lr 0.0001000
+Relative val loss: 4.80067
+Absolute val loss: 4.80067
+-----------------------------------------------------------------------------------------
+| end of epoch  19 | time: 11.25s | epoch loss 5.920237 |
+-----------------------------------------------------------------------------------------
+ [   20] (    0/   24) | ms/batch 249.1295 | loss 4.813531 | avg loss 4.813531 | lr 0.0001000
+Relative val loss: 4.61411
+Absolute val loss: 4.61411
+-----------------------------------------------------------------------------------------
+| end of epoch  20 | time: 11.20s | epoch loss 5.839367 |
+-----------------------------------------------------------------------------------------
+ [   21] (    0/   24) | ms/batch 185.0057 | loss 5.722862 | avg loss 5.722862 | lr 0.0001000
+Relative val loss: 6.87209
+Absolute val loss: 6.87209
+-----------------------------------------------------------------------------------------
+| end of epoch  21 | time: 11.08s | epoch loss 5.551859 |
+-----------------------------------------------------------------------------------------
+ [   22] (    0/   24) | ms/batch 327.8928 | loss 5.421921 | avg loss 5.421921 | lr 0.0001000
+Relative val loss: 6.20575
+Absolute val loss: 6.20575
+-----------------------------------------------------------------------------------------
+| end of epoch  22 | time: 11.38s | epoch loss 6.651753 |
+-----------------------------------------------------------------------------------------
+ [   23] (    0/   24) | ms/batch 190.7668 | loss 5.488013 | avg loss 5.488013 | lr 0.0001000
+Relative val loss: 4.86370
+Absolute val loss: 4.86370
+-----------------------------------------------------------------------------------------
+| end of epoch  23 | time: 11.38s | epoch loss 6.295029 |
+-----------------------------------------------------------------------------------------
+ [   24] (    0/   24) | ms/batch 183.4066 | loss 4.774464 | avg loss 4.774464 | lr 0.0001000
+Relative val loss: 13.79474
+Absolute val loss: 13.79474
+-----------------------------------------------------------------------------------------
+| end of epoch  24 | time: 11.67s | epoch loss 5.327089 |
+-----------------------------------------------------------------------------------------
+ [   25] (    0/   24) | ms/batch 110.8973 | loss 5.760120 | avg loss 5.760120 | lr 0.0001000
+Relative val loss: 4.41130
+Absolute val loss: 4.41130
+-----------------------------------------------------------------------------------------
+| end of epoch  25 | time: 11.56s | epoch loss 5.101283 |
+-----------------------------------------------------------------------------------------
+ [   26] (    0/   24) | ms/batch 112.7627 | loss 8.706218 | avg loss 8.706218 | lr 0.0001000
+Relative val loss: 5.41995
+Absolute val loss: 5.41995
+-----------------------------------------------------------------------------------------
+| end of epoch  26 | time: 11.66s | epoch loss 6.597968 |
+-----------------------------------------------------------------------------------------
+ [   27] (    0/   24) | ms/batch 242.2285 | loss 6.240156 | avg loss 6.240156 | lr 0.0001000
+Relative val loss: 5.51004
+Absolute val loss: 5.51004
+-----------------------------------------------------------------------------------------
+| end of epoch  27 | time:  9.95s | epoch loss 5.460973 |
+-----------------------------------------------------------------------------------------
+ [   28] (    0/   24) | ms/batch 126.0686 | loss 6.485888 | avg loss 6.485888 | lr 0.0001000
+Relative val loss: 4.94401
+Absolute val loss: 4.94401
+-----------------------------------------------------------------------------------------
+| end of epoch  28 | time:  9.19s | epoch loss 6.167930 |
+-----------------------------------------------------------------------------------------
+ [   29] (    0/   24) | ms/batch 228.3506 | loss 4.424649 | avg loss 4.424649 | lr 0.0001000
+Relative val loss: 4.88012
+Absolute val loss: 4.88012
+-----------------------------------------------------------------------------------------
+| end of epoch  29 | time:  8.88s | epoch loss 5.871557 |
+-----------------------------------------------------------------------------------------
+ [   30] (    0/   24) | ms/batch 182.4646 | loss 4.231362 | avg loss 4.231362 | lr 0.0001000
+Relative val loss: 4.72496
+Absolute val loss: 4.72496
+-----------------------------------------------------------------------------------------
+| end of epoch  30 | time:  8.96s | epoch loss 4.894628 |
+-----------------------------------------------------------------------------------------
+ [   31] (    0/   24) | ms/batch 111.2010 | loss 3.070612 | avg loss 3.070612 | lr 0.0001000
+Relative val loss: 7.93519
+Absolute val loss: 7.93519
+-----------------------------------------------------------------------------------------
+| end of epoch  31 | time:  9.04s | epoch loss 5.176739 |
+-----------------------------------------------------------------------------------------
+ [   32] (    0/   24) | ms/batch 115.5975 | loss 3.716306 | avg loss 3.716306 | lr 0.0001000
+Relative val loss: 5.42374
+Absolute val loss: 5.42374
+-----------------------------------------------------------------------------------------
+| end of epoch  32 | time:  8.83s | epoch loss 5.089806 |
+-----------------------------------------------------------------------------------------
+ [   33] (    0/   24) | ms/batch 118.3288 | loss 5.316480 | avg loss 5.316480 | lr 0.0001000
+Relative val loss: 4.27657
+Absolute val loss: 4.27657
+-----------------------------------------------------------------------------------------
+| end of epoch  33 | time:  8.93s | epoch loss 5.337496 |
+-----------------------------------------------------------------------------------------
+ [   34] (    0/   24) | ms/batch 231.1034 | loss 4.238446 | avg loss 4.238446 | lr 0.0001000
+Relative val loss: 5.56933
+Absolute val loss: 5.56933
+-----------------------------------------------------------------------------------------
+| end of epoch  34 | time:  8.87s | epoch loss 4.764815 |
+-----------------------------------------------------------------------------------------
+ [   35] (    0/   24) | ms/batch 111.0435 | loss 6.986187 | avg loss 6.986187 | lr 0.0001000
+Relative val loss: 7.67132
+Absolute val loss: 7.67132
+-----------------------------------------------------------------------------------------
+| end of epoch  35 | time:  8.97s | epoch loss 5.444383 |
+-----------------------------------------------------------------------------------------
+ [   36] (    0/   24) | ms/batch 136.5490 | loss 5.158916 | avg loss 5.158916 | lr 0.0001000
+Relative val loss: 5.24761
+Absolute val loss: 5.24761
+-----------------------------------------------------------------------------------------
+| end of epoch  36 | time:  9.10s | epoch loss 4.781777 |
+-----------------------------------------------------------------------------------------
+ [   37] (    0/   24) | ms/batch 111.1135 | loss 3.743304 | avg loss 3.743304 | lr 0.0001000
+Relative val loss: 4.41815
+Absolute val loss: 4.41815
+-----------------------------------------------------------------------------------------
+| end of epoch  37 | time:  8.80s | epoch loss 5.414532 |
+-----------------------------------------------------------------------------------------
+ [   38] (    0/   24) | ms/batch 110.9774 | loss 3.939772 | avg loss 3.939772 | lr 0.0001000
+Relative val loss: 4.94412
+Absolute val loss: 4.94412
+-----------------------------------------------------------------------------------------
+| end of epoch  38 | time:  9.35s | epoch loss 5.426046 |
+-----------------------------------------------------------------------------------------
+ [   39] (    0/   24) | ms/batch 142.7016 | loss 4.179766 | avg loss 4.179766 | lr 0.0001000
+Relative val loss: 4.20266
+Absolute val loss: 4.20266
+-----------------------------------------------------------------------------------------
+| end of epoch  39 | time: 11.00s | epoch loss 5.125502 |
+-----------------------------------------------------------------------------------------
+ [   40] (    0/   24) | ms/batch 144.8824 | loss 3.736773 | avg loss 3.736773 | lr 0.0001000
+Relative val loss: 3.80447
+Absolute val loss: 3.80447
+-----------------------------------------------------------------------------------------
+| end of epoch  40 | time:  8.99s | epoch loss 5.647008 |
+-----------------------------------------------------------------------------------------
+ [   41] (    0/   24) | ms/batch 150.8303 | loss 4.048679 | avg loss 4.048679 | lr 0.0001000
+Relative val loss: 4.30642
+Absolute val loss: 4.30642
+-----------------------------------------------------------------------------------------
+| end of epoch  41 | time: 10.08s | epoch loss 5.712615 |
+-----------------------------------------------------------------------------------------
+ [   42] (    0/   24) | ms/batch 188.7245 | loss 4.443067 | avg loss 4.443067 | lr 0.0001000
+Relative val loss: 4.17515
+Absolute val loss: 4.17515
+-----------------------------------------------------------------------------------------
+| end of epoch  42 | time: 10.56s | epoch loss 5.090259 |
+-----------------------------------------------------------------------------------------
+ [   43] (    0/   24) | ms/batch 110.9078 | loss 4.826487 | avg loss 4.826487 | lr 0.0001000
+Relative val loss: 5.08458
+Absolute val loss: 5.08458
+-----------------------------------------------------------------------------------------
+| end of epoch  43 | time: 10.98s | epoch loss 4.507798 |
+-----------------------------------------------------------------------------------------
+ [   44] (    0/   24) | ms/batch 328.3575 | loss 5.025359 | avg loss 5.025359 | lr 0.0001000
+Relative val loss: 4.37531
+Absolute val loss: 4.37531
+-----------------------------------------------------------------------------------------
+| end of epoch  44 | time: 10.86s | epoch loss 4.723797 |
+-----------------------------------------------------------------------------------------
+ [   45] (    0/   24) | ms/batch 279.5351 | loss 4.880905 | avg loss 4.880905 | lr 0.0001000
+Relative val loss: 5.29094
+Absolute val loss: 5.29094
+-----------------------------------------------------------------------------------------
+| end of epoch  45 | time: 10.95s | epoch loss 5.044155 |
+-----------------------------------------------------------------------------------------
+ [   46] (    0/   24) | ms/batch 236.2120 | loss 3.111724 | avg loss 3.111724 | lr 0.0001000
+Relative val loss: 4.78294
+Absolute val loss: 4.78294
+-----------------------------------------------------------------------------------------
+| end of epoch  46 | time: 10.96s | epoch loss 4.809854 |
+-----------------------------------------------------------------------------------------
+ [   47] (    0/   24) | ms/batch 123.9030 | loss 6.894059 | avg loss 6.894059 | lr 0.0001000
+Relative val loss: 4.95462
+Absolute val loss: 4.95462
+-----------------------------------------------------------------------------------------
+| end of epoch  47 | time: 11.16s | epoch loss 4.681380 |
+-----------------------------------------------------------------------------------------
+ [   48] (    0/   24) | ms/batch 111.2080 | loss 7.751649 | avg loss 7.751649 | lr 0.0001000
+Relative val loss: 5.42937
+Absolute val loss: 5.42937
+-----------------------------------------------------------------------------------------
+| end of epoch  48 | time:  8.93s | epoch loss 5.125356 |
+-----------------------------------------------------------------------------------------
+ [   49] (    0/   24) | ms/batch 136.4849 | loss 2.962322 | avg loss 2.962322 | lr 0.0001000
+Relative val loss: 3.80651
+Absolute val loss: 3.80651
+-----------------------------------------------------------------------------------------
+| end of epoch  49 | time:  8.88s | epoch loss 4.986666 |
+-----------------------------------------------------------------------------------------
+ [   50] (    0/   24) | ms/batch 216.5778 | loss 4.219392 | avg loss 4.219392 | lr 0.0001000
+Relative val loss: 4.79343
+Absolute val loss: 4.79343
+-----------------------------------------------------------------------------------------
+| end of epoch  50 | time:  8.92s | epoch loss 4.761034 |
+-----------------------------------------------------------------------------------------
+ [   51] (    0/   24) | ms/batch 110.8749 | loss 3.362366 | avg loss 3.362366 | lr 0.0001000
+Relative val loss: 8.09336
+Absolute val loss: 8.09336
+-----------------------------------------------------------------------------------------
+| end of epoch  51 | time:  9.16s | epoch loss 4.284947 |
+-----------------------------------------------------------------------------------------
+ [   52] (    0/   24) | ms/batch 202.8670 | loss 3.467117 | avg loss 3.467117 | lr 0.0001000
+Relative val loss: 3.29095
+Absolute val loss: 3.29095
+-----------------------------------------------------------------------------------------
+| end of epoch  52 | time:  8.82s | epoch loss 4.220150 |
+-----------------------------------------------------------------------------------------
+ [   53] (    0/   24) | ms/batch 156.7917 | loss 4.036709 | avg loss 4.036709 | lr 0.0001000
+Relative val loss: 4.88289
+Absolute val loss: 4.88289
+-----------------------------------------------------------------------------------------
+| end of epoch  53 | time:  8.58s | epoch loss 4.282378 |
+-----------------------------------------------------------------------------------------
+ [   54] (    0/   24) | ms/batch 111.3071 | loss 4.320399 | avg loss 4.320399 | lr 0.0001000
+Relative val loss: 3.82651
+Absolute val loss: 3.82651
+-----------------------------------------------------------------------------------------
+| end of epoch  54 | time:  8.98s | epoch loss 5.089367 |
+-----------------------------------------------------------------------------------------
+ [   55] (    0/   24) | ms/batch 111.0308 | loss 4.048941 | avg loss 4.048941 | lr 0.0001000
+Relative val loss: 3.76475
+Absolute val loss: 3.76475
+-----------------------------------------------------------------------------------------
+| end of epoch  55 | time:  9.62s | epoch loss 4.906312 |
+-----------------------------------------------------------------------------------------
+ [   56] (    0/   24) | ms/batch 141.8290 | loss 3.992401 | avg loss 3.992401 | lr 0.0001000
+Relative val loss: 4.81617
+Absolute val loss: 4.81617
+-----------------------------------------------------------------------------------------
+| end of epoch  56 | time:  9.20s | epoch loss 4.581429 |
+-----------------------------------------------------------------------------------------
+ [   57] (    0/   24) | ms/batch 111.0327 | loss 4.467944 | avg loss 4.467944 | lr 0.0001000
+Relative val loss: 3.01089
+Absolute val loss: 3.01089
+-----------------------------------------------------------------------------------------
+| end of epoch  57 | time:  9.48s | epoch loss 4.177051 |
+-----------------------------------------------------------------------------------------
+ [   58] (    0/   24) | ms/batch 213.9180 | loss 2.903689 | avg loss 2.903689 | lr 0.0001000
+Relative val loss: 3.23837
+Absolute val loss: 3.23837
+-----------------------------------------------------------------------------------------
+| end of epoch  58 | time:  8.86s | epoch loss 4.372247 |
+-----------------------------------------------------------------------------------------
+ [   59] (    0/   24) | ms/batch 215.2233 | loss 6.725781 | avg loss 6.725781 | lr 0.0001000
+Relative val loss: 6.45610
+Absolute val loss: 6.45610
+-----------------------------------------------------------------------------------------
+| end of epoch  59 | time:  8.42s | epoch loss 5.007410 |
+-----------------------------------------------------------------------------------------
+ [   60] (    0/   24) | ms/batch 208.8361 | loss 3.169880 | avg loss 3.169880 | lr 0.0001000
+Relative val loss: 3.54264
+Absolute val loss: 3.54264
+-----------------------------------------------------------------------------------------
+| end of epoch  60 | time:  8.82s | epoch loss 4.184021 |
+-----------------------------------------------------------------------------------------
+ [   61] (    0/   24) | ms/batch 213.1171 | loss 3.208534 | avg loss 3.208534 | lr 0.0001000
+Relative val loss: 3.42001
+Absolute val loss: 3.42001
+-----------------------------------------------------------------------------------------
+| end of epoch  61 | time:  8.94s | epoch loss 4.129348 |
+-----------------------------------------------------------------------------------------
+ [   62] (    0/   24) | ms/batch 110.9264 | loss 2.883624 | avg loss 2.883624 | lr 0.0001000
+Relative val loss: 3.43587
+Absolute val loss: 3.43587
+-----------------------------------------------------------------------------------------
+| end of epoch  62 | time:  9.01s | epoch loss 4.456204 |
+-----------------------------------------------------------------------------------------
+ [   63] (    0/   24) | ms/batch 212.6658 | loss 4.205894 | avg loss 4.205894 | lr 0.0001000
+Relative val loss: 3.72809
+Absolute val loss: 3.72809
+-----------------------------------------------------------------------------------------
+| end of epoch  63 | time:  8.73s | epoch loss 4.211697 |
+-----------------------------------------------------------------------------------------
+ [   64] (    0/   24) | ms/batch 221.1010 | loss 3.016630 | avg loss 3.016630 | lr 0.0001000
+Relative val loss: 2.99272
+Absolute val loss: 2.99272
+-----------------------------------------------------------------------------------------
+| end of epoch  64 | time:  8.84s | epoch loss 4.276218 |
+-----------------------------------------------------------------------------------------
+ [   65] (    0/   24) | ms/batch 153.2955 | loss 5.152035 | avg loss 5.152035 | lr 0.0001000
+Relative val loss: 3.78428
+Absolute val loss: 3.78428
+-----------------------------------------------------------------------------------------
+| end of epoch  65 | time:  8.66s | epoch loss 4.498819 |
+-----------------------------------------------------------------------------------------
+ [   66] (    0/   24) | ms/batch 121.1517 | loss 5.886416 | avg loss 5.886416 | lr 0.0001000
+Relative val loss: 5.14752
+Absolute val loss: 5.14752
+-----------------------------------------------------------------------------------------
+| end of epoch  66 | time:  8.64s | epoch loss 4.032908 |
+-----------------------------------------------------------------------------------------
+ [   67] (    0/   24) | ms/batch 111.1298 | loss 3.922810 | avg loss 3.922810 | lr 0.0001000
+Relative val loss: 2.68913
+Absolute val loss: 2.68913
+-----------------------------------------------------------------------------------------
+| end of epoch  67 | time:  9.07s | epoch loss 4.337533 |
+-----------------------------------------------------------------------------------------
+ [   68] (    0/   24) | ms/batch 209.4507 | loss 2.407362 | avg loss 2.407362 | lr 0.0001000
+Relative val loss: 3.85054
+Absolute val loss: 3.85054
+-----------------------------------------------------------------------------------------
+| end of epoch  68 | time:  8.56s | epoch loss 4.642347 |
+-----------------------------------------------------------------------------------------
+ [   69] (    0/   24) | ms/batch 110.9700 | loss 3.704593 | avg loss 3.704593 | lr 0.0001000
+Relative val loss: 6.70867
+Absolute val loss: 6.70867
+-----------------------------------------------------------------------------------------
+| end of epoch  69 | time:  8.64s | epoch loss 4.390233 |
+-----------------------------------------------------------------------------------------
+ [   70] (    0/   24) | ms/batch 219.3754 | loss 2.583350 | avg loss 2.583350 | lr 0.0001000
+Relative val loss: 5.97111
+Absolute val loss: 5.97111
+-----------------------------------------------------------------------------------------
+| end of epoch  70 | time:  9.04s | epoch loss 4.672672 |
+-----------------------------------------------------------------------------------------
+ [   71] (    0/   24) | ms/batch 214.5283 | loss 3.922005 | avg loss 3.922005 | lr 0.0001000
+Relative val loss: 3.18848
+Absolute val loss: 3.18848
+-----------------------------------------------------------------------------------------
+| end of epoch  71 | time:  8.97s | epoch loss 4.277633 |
+-----------------------------------------------------------------------------------------
+ [   72] (    0/   24) | ms/batch 149.6508 | loss 2.573610 | avg loss 2.573610 | lr 0.0001000
+Relative val loss: 8.41699
+Absolute val loss: 8.41699
+-----------------------------------------------------------------------------------------
+| end of epoch  72 | time:  8.90s | epoch loss 3.785144 |
+-----------------------------------------------------------------------------------------
+ [   73] (    0/   24) | ms/batch 211.8800 | loss 3.538379 | avg loss 3.538379 | lr 0.0001000
+Relative val loss: 2.52679
+Absolute val loss: 2.52679
+-----------------------------------------------------------------------------------------
+| end of epoch  73 | time:  8.99s | epoch loss 3.833138 |
+-----------------------------------------------------------------------------------------
+ [   74] (    0/   24) | ms/batch 211.8683 | loss 3.401542 | avg loss 3.401542 | lr 0.0001000
+Relative val loss: 3.24607
+Absolute val loss: 3.24607
+-----------------------------------------------------------------------------------------
+| end of epoch  74 | time:  8.46s | epoch loss 3.654432 |
+-----------------------------------------------------------------------------------------
+ [   75] (    0/   24) | ms/batch 111.1352 | loss 3.098927 | avg loss 3.098927 | lr 0.0001000
+Relative val loss: 3.55199
+Absolute val loss: 3.55199
+-----------------------------------------------------------------------------------------
+| end of epoch  75 | time:  8.81s | epoch loss 5.014050 |
+-----------------------------------------------------------------------------------------
+ [   76] (    0/   24) | ms/batch 210.9008 | loss 3.941029 | avg loss 3.941029 | lr 0.0001000
+Relative val loss: 3.18864
+Absolute val loss: 3.18864
+-----------------------------------------------------------------------------------------
+| end of epoch  76 | time:  8.87s | epoch loss 4.194103 |
+-----------------------------------------------------------------------------------------
+ [   77] (    0/   24) | ms/batch 117.2731 | loss 5.495018 | avg loss 5.495018 | lr 0.0001000
+Relative val loss: 4.13293
+Absolute val loss: 4.13293
+-----------------------------------------------------------------------------------------
+| end of epoch  77 | time:  9.26s | epoch loss 4.365545 |
+-----------------------------------------------------------------------------------------
+ [   78] (    0/   24) | ms/batch 111.0830 | loss 6.816158 | avg loss 6.816158 | lr 0.0001000
+Relative val loss: 4.43271
+Absolute val loss: 4.43271
+-----------------------------------------------------------------------------------------
+| end of epoch  78 | time:  8.69s | epoch loss 4.152620 |
+-----------------------------------------------------------------------------------------
+ [   79] (    0/   24) | ms/batch 182.5132 | loss 2.809587 | avg loss 2.809587 | lr 0.0001000
+Relative val loss: 4.24282
+Absolute val loss: 4.24282
+-----------------------------------------------------------------------------------------
+| end of epoch  79 | time:  9.04s | epoch loss 4.158314 |
+-----------------------------------------------------------------------------------------
+ [   80] (    0/   24) | ms/batch 110.8677 | loss 4.098535 | avg loss 4.098535 | lr 0.0001000
+Relative val loss: 4.84035
+Absolute val loss: 4.84035
+-----------------------------------------------------------------------------------------
+| end of epoch  80 | time:  9.13s | epoch loss 4.197889 |
+-----------------------------------------------------------------------------------------
+ [   81] (    0/   24) | ms/batch 208.1912 | loss 6.419476 | avg loss 6.419476 | lr 0.0001000
+Relative val loss: 3.37085
+Absolute val loss: 3.37085
+-----------------------------------------------------------------------------------------
+| end of epoch  81 | time:  8.98s | epoch loss 3.873729 |
+-----------------------------------------------------------------------------------------
+ [   82] (    0/   24) | ms/batch 111.2449 | loss 3.262299 | avg loss 3.262299 | lr 0.0001000
+Relative val loss: 2.63308
+Absolute val loss: 2.63308
+-----------------------------------------------------------------------------------------
+| end of epoch  82 | time:  8.87s | epoch loss 4.260180 |
+-----------------------------------------------------------------------------------------
+ [   83] (    0/   24) | ms/batch 111.2809 | loss 3.165239 | avg loss 3.165239 | lr 0.0001000
+Relative val loss: 3.61558
+Absolute val loss: 3.61558
+-----------------------------------------------------------------------------------------
+| end of epoch  83 | time:  8.76s | epoch loss 3.522812 |
+-----------------------------------------------------------------------------------------
+ [   84] (    0/   24) | ms/batch 111.2149 | loss 2.590070 | avg loss 2.590070 | lr 0.0001000
+Relative val loss: 3.61795
+Absolute val loss: 3.61795
+-----------------------------------------------------------------------------------------
+| end of epoch  84 | time:  9.02s | epoch loss 4.120867 |
+-----------------------------------------------------------------------------------------
+ [   85] (    0/   24) | ms/batch 110.8613 | loss 4.108396 | avg loss 4.108396 | lr 0.0001000
+Relative val loss: 2.94195
+Absolute val loss: 2.94195
+-----------------------------------------------------------------------------------------
+| end of epoch  85 | time:  9.00s | epoch loss 3.670851 |
+-----------------------------------------------------------------------------------------
+ [   86] (    0/   24) | ms/batch 110.9312 | loss 2.919977 | avg loss 2.919977 | lr 0.0001000
+Relative val loss: 3.08057
+Absolute val loss: 3.08057
+-----------------------------------------------------------------------------------------
+| end of epoch  86 | time:  9.09s | epoch loss 3.836110 |
+-----------------------------------------------------------------------------------------
+ [   87] (    0/   24) | ms/batch 145.3879 | loss 5.104643 | avg loss 5.104643 | lr 0.0001000
+Relative val loss: 2.67418
+Absolute val loss: 2.67418
+-----------------------------------------------------------------------------------------
+| end of epoch  87 | time:  9.09s | epoch loss 4.616776 |
+-----------------------------------------------------------------------------------------
+ [   88] (    0/   24) | ms/batch 211.9946 | loss 3.933705 | avg loss 3.933705 | lr 0.0001000
+Relative val loss: 5.65037
+Absolute val loss: 5.65037
+-----------------------------------------------------------------------------------------
+| end of epoch  88 | time:  8.83s | epoch loss 3.560822 |
+-----------------------------------------------------------------------------------------
+ [   89] (    0/   24) | ms/batch 110.8358 | loss 4.481847 | avg loss 4.481847 | lr 0.0001000
+Relative val loss: 4.92340
+Absolute val loss: 4.92340
+-----------------------------------------------------------------------------------------
+| end of epoch  89 | time:  8.70s | epoch loss 3.418083 |
+-----------------------------------------------------------------------------------------
+ [   90] (    0/   24) | ms/batch 111.2075 | loss 6.806738 | avg loss 6.806738 | lr 0.0001000
+Relative val loss: 3.04228
+Absolute val loss: 3.04228
+-----------------------------------------------------------------------------------------
+| end of epoch  90 | time:  8.83s | epoch loss 5.160625 |
+-----------------------------------------------------------------------------------------
+ [   91] (    0/   24) | ms/batch 136.4951 | loss 3.617401 | avg loss 3.617401 | lr 0.0001000
+Relative val loss: 9.40911
+Absolute val loss: 9.40911
+-----------------------------------------------------------------------------------------
+| end of epoch  91 | time:  8.71s | epoch loss 3.674713 |
+-----------------------------------------------------------------------------------------
+ [   92] (    0/   24) | ms/batch 111.1438 | loss 4.131643 | avg loss 4.131643 | lr 0.0001000
+Relative val loss: 5.43986
+Absolute val loss: 5.43986
+-----------------------------------------------------------------------------------------
+| end of epoch  92 | time:  9.05s | epoch loss 5.140521 |
+-----------------------------------------------------------------------------------------
+ [   93] (    0/   24) | ms/batch 142.7879 | loss 3.783981 | avg loss 3.783981 | lr 0.0001000
+Relative val loss: 3.44332
+Absolute val loss: 3.44332
+-----------------------------------------------------------------------------------------
+| end of epoch  93 | time:  8.47s | epoch loss 4.303338 |
+-----------------------------------------------------------------------------------------
+ [   94] (    0/   24) | ms/batch 215.2181 | loss 2.791986 | avg loss 2.791986 | lr 0.0001000
+Relative val loss: 5.68209
+Absolute val loss: 5.68209
+-----------------------------------------------------------------------------------------
+| end of epoch  94 | time:  8.83s | epoch loss 4.851048 |
+-----------------------------------------------------------------------------------------
+ [   95] (    0/   24) | ms/batch 185.0922 | loss 3.032516 | avg loss 3.032516 | lr 0.0001000
+Relative val loss: 2.91327
+Absolute val loss: 2.91327
+-----------------------------------------------------------------------------------------
+| end of epoch  95 | time:  9.14s | epoch loss 3.800960 |
+-----------------------------------------------------------------------------------------
+ [   96] (    0/   24) | ms/batch 211.4372 | loss 4.047170 | avg loss 4.047170 | lr 0.0001000
+Relative val loss: 3.32831
+Absolute val loss: 3.32831
+-----------------------------------------------------------------------------------------
+| end of epoch  96 | time:  8.83s | epoch loss 3.875271 |
+-----------------------------------------------------------------------------------------
+ [   97] (    0/   24) | ms/batch 185.5803 | loss 4.565072 | avg loss 4.565072 | lr 0.0001000
+Relative val loss: 7.64566
+Absolute val loss: 7.64566
+-----------------------------------------------------------------------------------------
+| end of epoch  97 | time:  9.03s | epoch loss 3.677525 |
+-----------------------------------------------------------------------------------------
+ [   98] (    0/   24) | ms/batch 233.8700 | loss 5.126253 | avg loss 5.126253 | lr 0.0001000
+Relative val loss: 3.32688
+Absolute val loss: 3.32688
+-----------------------------------------------------------------------------------------
+| end of epoch  98 | time:  8.68s | epoch loss 3.735846 |
+-----------------------------------------------------------------------------------------
+ [   99] (    0/   24) | ms/batch 218.4105 | loss 2.202675 | avg loss 2.202675 | lr 0.0001000
+Relative val loss: 2.44851
+Absolute val loss: 2.44851
+-----------------------------------------------------------------------------------------
+| end of epoch  99 | time:  8.80s | epoch loss 4.161086 |
+-----------------------------------------------------------------------------------------
+ [  100] (    0/   24) | ms/batch 150.3289 | loss 3.838271 | avg loss 3.838271 | lr 0.0001000
+Relative val loss: 3.35262
+Absolute val loss: 3.35262
+-----------------------------------------------------------------------------------------
+| end of epoch 100 | time:  8.80s | epoch loss 4.333871 |
+-----------------------------------------------------------------------------------------
+ [  101] (    0/   24) | ms/batch 246.6917 | loss 3.410941 | avg loss 3.410941 | lr 0.0001000
+Relative val loss: 3.04815
+Absolute val loss: 3.04815
+-----------------------------------------------------------------------------------------
+| end of epoch 101 | time:  8.91s | epoch loss 4.096726 |
+-----------------------------------------------------------------------------------------
+ [  102] (    0/   24) | ms/batch 110.9912 | loss 5.905415 | avg loss 5.905415 | lr 0.0001000
+Relative val loss: 4.39471
+Absolute val loss: 4.39471
+-----------------------------------------------------------------------------------------
+| end of epoch 102 | time:  8.81s | epoch loss 4.342535 |
+-----------------------------------------------------------------------------------------
+ [  103] (    0/   24) | ms/batch 110.9238 | loss 3.076602 | avg loss 3.076602 | lr 0.0001000
+Relative val loss: 6.21784
+Absolute val loss: 6.21784
+-----------------------------------------------------------------------------------------
+| end of epoch 103 | time:  8.71s | epoch loss 3.883507 |
+-----------------------------------------------------------------------------------------
+ [  104] (    0/   24) | ms/batch 216.3043 | loss 7.034162 | avg loss 7.034162 | lr 0.0001000
+Relative val loss: 4.97648
+Absolute val loss: 4.97648
+-----------------------------------------------------------------------------------------
+| end of epoch 104 | time:  8.82s | epoch loss 3.865924 |
+-----------------------------------------------------------------------------------------
+ [  105] (    0/   24) | ms/batch 246.8402 | loss 3.369234 | avg loss 3.369234 | lr 0.0001000
+Relative val loss: 3.28416
+Absolute val loss: 3.28416
+-----------------------------------------------------------------------------------------
+| end of epoch 105 | time:  9.00s | epoch loss 3.898234 |
+-----------------------------------------------------------------------------------------
+ [  106] (    0/   24) | ms/batch 111.0530 | loss 3.972846 | avg loss 3.972846 | lr 0.0001000
+Relative val loss: 2.82307
+Absolute val loss: 2.82307
+-----------------------------------------------------------------------------------------
+| end of epoch 106 | time:  8.68s | epoch loss 4.125708 |
+-----------------------------------------------------------------------------------------
+ [  107] (    0/   24) | ms/batch 110.9557 | loss 4.650290 | avg loss 4.650290 | lr 0.0001000
+Relative val loss: 6.13336
+Absolute val loss: 6.13336
+-----------------------------------------------------------------------------------------
+| end of epoch 107 | time:  9.05s | epoch loss 4.086792 |
+-----------------------------------------------------------------------------------------
+ [  108] (    0/   24) | ms/batch 166.3759 | loss 5.367812 | avg loss 5.367812 | lr 0.0001000
+Relative val loss: 1.98284
+Absolute val loss: 1.98284
+-----------------------------------------------------------------------------------------
+| end of epoch 108 | time:  8.54s | epoch loss 3.588660 |
+-----------------------------------------------------------------------------------------
+ [  109] (    0/   24) | ms/batch 111.0041 | loss 4.449156 | avg loss 4.449156 | lr 0.0001000
+Relative val loss: 7.62431
+Absolute val loss: 7.62431
+-----------------------------------------------------------------------------------------
+| end of epoch 109 | time:  9.18s | epoch loss 3.629593 |
+-----------------------------------------------------------------------------------------
+ [  110] (    0/   24) | ms/batch 121.3372 | loss 3.047841 | avg loss 3.047841 | lr 0.0001000
+Relative val loss: 3.87209
+Absolute val loss: 3.87209
+-----------------------------------------------------------------------------------------
+| end of epoch 110 | time:  8.75s | epoch loss 4.112001 |
+-----------------------------------------------------------------------------------------
+ [  111] (    0/   24) | ms/batch 237.4680 | loss 2.311874 | avg loss 2.311874 | lr 0.0001000
+Relative val loss: 2.78144
+Absolute val loss: 2.78144
+-----------------------------------------------------------------------------------------
+| end of epoch 111 | time:  8.99s | epoch loss 3.741070 |
+-----------------------------------------------------------------------------------------
+ [  112] (    0/   24) | ms/batch 111.1469 | loss 2.868770 | avg loss 2.868770 | lr 0.0001000
+Relative val loss: 2.16791
+Absolute val loss: 2.16791
+-----------------------------------------------------------------------------------------
+| end of epoch 112 | time:  9.11s | epoch loss 3.044331 |
+-----------------------------------------------------------------------------------------
+ [  113] (    0/   24) | ms/batch 139.0293 | loss 2.899418 | avg loss 2.899418 | lr 0.0001000
+Relative val loss: 2.69237
+Absolute val loss: 2.69237
+-----------------------------------------------------------------------------------------
+| end of epoch 113 | time:  8.81s | epoch loss 3.616587 |
+-----------------------------------------------------------------------------------------
+ [  114] (    0/   24) | ms/batch 117.5816 | loss 2.673126 | avg loss 2.673126 | lr 0.0001000
+Relative val loss: 2.28396
+Absolute val loss: 2.28396
+-----------------------------------------------------------------------------------------
+| end of epoch 114 | time:  8.81s | epoch loss 3.559297 |
+-----------------------------------------------------------------------------------------
+ [  115] (    0/   24) | ms/batch 215.6253 | loss 3.156705 | avg loss 3.156705 | lr 0.0001000
+Relative val loss: 3.70798
+Absolute val loss: 3.70798
+-----------------------------------------------------------------------------------------
+| end of epoch 115 | time:  8.59s | epoch loss 3.464675 |
+-----------------------------------------------------------------------------------------
+ [  116] (    0/   24) | ms/batch 111.1183 | loss 2.691099 | avg loss 2.691099 | lr 0.0001000
+Relative val loss: 2.06106
+Absolute val loss: 2.06106
+-----------------------------------------------------------------------------------------
+| end of epoch 116 | time:  9.28s | epoch loss 3.885325 |
+-----------------------------------------------------------------------------------------
+ [  117] (    0/   24) | ms/batch 226.3148 | loss 3.964935 | avg loss 3.964935 | lr 0.0001000
+Relative val loss: 2.52588
+Absolute val loss: 2.52588
+-----------------------------------------------------------------------------------------
+| end of epoch 117 | time:  8.94s | epoch loss 4.840061 |
+-----------------------------------------------------------------------------------------
+ [  118] (    0/   24) | ms/batch 114.2819 | loss 2.901897 | avg loss 2.901897 | lr 0.0001000
+Relative val loss: 4.46509
+Absolute val loss: 4.46509
+-----------------------------------------------------------------------------------------
+| end of epoch 118 | time:  8.93s | epoch loss 3.839643 |
+-----------------------------------------------------------------------------------------
+ [  119] (    0/   24) | ms/batch 234.2460 | loss 4.852178 | avg loss 4.852178 | lr 0.0001000
+Relative val loss: 2.58444
+Absolute val loss: 2.58444
+-----------------------------------------------------------------------------------------
+| end of epoch 119 | time:  8.94s | epoch loss 3.200725 |
+-----------------------------------------------------------------------------------------
+ [  120] (    0/   24) | ms/batch 111.0556 | loss 4.658021 | avg loss 4.658021 | lr 0.0001000
+Relative val loss: 2.52870
+Absolute val loss: 2.52870
+-----------------------------------------------------------------------------------------
+| end of epoch 120 | time:  8.75s | epoch loss 3.490384 |
+-----------------------------------------------------------------------------------------
+ [  121] (    0/   24) | ms/batch 111.9349 | loss 2.865876 | avg loss 2.865876 | lr 0.0001000
+Relative val loss: 2.53246
+Absolute val loss: 2.53246
+-----------------------------------------------------------------------------------------
+| end of epoch 121 | time:  8.72s | epoch loss 3.138037 |
+-----------------------------------------------------------------------------------------
+ [  122] (    0/   24) | ms/batch 110.9793 | loss 3.753720 | avg loss 3.753720 | lr 0.0001000
+Relative val loss: 2.95023
+Absolute val loss: 2.95023
+-----------------------------------------------------------------------------------------
+| end of epoch 122 | time:  8.92s | epoch loss 4.175880 |
+-----------------------------------------------------------------------------------------
+ [  123] (    0/   24) | ms/batch 111.1836 | loss 3.402430 | avg loss 3.402430 | lr 0.0001000
+Relative val loss: 3.66636
+Absolute val loss: 3.66636
+-----------------------------------------------------------------------------------------
+| end of epoch 123 | time:  9.30s | epoch loss 3.570266 |
+-----------------------------------------------------------------------------------------
+ [  124] (    0/   24) | ms/batch 217.2890 | loss 2.542760 | avg loss 2.542760 | lr 0.0001000
+Relative val loss: 2.72996
+Absolute val loss: 2.72996
+-----------------------------------------------------------------------------------------
+| end of epoch 124 | time:  9.10s | epoch loss 3.039858 |
+-----------------------------------------------------------------------------------------
+ [  125] (    0/   24) | ms/batch 145.3955 | loss 3.940445 | avg loss 3.940445 | lr 0.0001000
+Relative val loss: 2.88482
+Absolute val loss: 2.88482
+-----------------------------------------------------------------------------------------
+| end of epoch 125 | time: 11.17s | epoch loss 3.445951 |
+-----------------------------------------------------------------------------------------
+ [  126] (    0/   24) | ms/batch 247.8609 | loss 2.078540 | avg loss 2.078540 | lr 0.0001000
+Relative val loss: 5.34573
+Absolute val loss: 5.34573
+-----------------------------------------------------------------------------------------
+| end of epoch 126 | time: 11.41s | epoch loss 2.698734 |
+-----------------------------------------------------------------------------------------
+ [  127] (    0/   24) | ms/batch 110.8341 | loss 2.568723 | avg loss 2.568723 | lr 0.0001000
+Relative val loss: 2.33627
+Absolute val loss: 2.33627
+-----------------------------------------------------------------------------------------
+| end of epoch 127 | time: 11.34s | epoch loss 3.959001 |
+-----------------------------------------------------------------------------------------
+ [  128] (    0/   24) | ms/batch 144.6500 | loss 3.588843 | avg loss 3.588843 | lr 0.0001000
+Relative val loss: 4.07559
+Absolute val loss: 4.07559
+-----------------------------------------------------------------------------------------
+| end of epoch 128 | time: 11.08s | epoch loss 3.078389 |
+-----------------------------------------------------------------------------------------
+ [  129] (    0/   24) | ms/batch 128.7982 | loss 2.748487 | avg loss 2.748487 | lr 0.0001000
+Relative val loss: 5.50149
+Absolute val loss: 5.50149
+-----------------------------------------------------------------------------------------
+| end of epoch 129 | time: 11.46s | epoch loss 3.285342 |
+-----------------------------------------------------------------------------------------
+ [  130] (    0/   24) | ms/batch 111.1624 | loss 1.861612 | avg loss 1.861612 | lr 0.0001000
+Relative val loss: 2.03877
+Absolute val loss: 2.03877
+-----------------------------------------------------------------------------------------
+| end of epoch 130 | time: 11.28s | epoch loss 3.408390 |
+-----------------------------------------------------------------------------------------
+ [  131] (    0/   24) | ms/batch 112.1042 | loss 1.985613 | avg loss 1.985613 | lr 0.0001000
+Relative val loss: 2.57104
+Absolute val loss: 2.57104
+-----------------------------------------------------------------------------------------
+| end of epoch 131 | time: 11.14s | epoch loss 3.286675 |
+-----------------------------------------------------------------------------------------
+ [  132] (    0/   24) | ms/batch 215.5550 | loss 3.735918 | avg loss 3.735918 | lr 0.0001000
+Relative val loss: 3.50436
+Absolute val loss: 3.50436
+-----------------------------------------------------------------------------------------
+| end of epoch 132 | time: 11.51s | epoch loss 2.936499 |
+-----------------------------------------------------------------------------------------
+ [  133] (    0/   24) | ms/batch 313.2212 | loss 4.596781 | avg loss 4.596781 | lr 0.0001000
+Relative val loss: 3.28565
+Absolute val loss: 3.28565
+-----------------------------------------------------------------------------------------
+| end of epoch 133 | time: 11.58s | epoch loss 2.936405 |
+-----------------------------------------------------------------------------------------
+ [  134] (    0/   24) | ms/batch 332.9811 | loss 3.271648 | avg loss 3.271648 | lr 0.0001000
+Relative val loss: 2.98802
+Absolute val loss: 2.98802
+-----------------------------------------------------------------------------------------
+| end of epoch 134 | time: 11.50s | epoch loss 3.029745 |
+-----------------------------------------------------------------------------------------
+ [  135] (    0/   24) | ms/batch 306.4747 | loss 3.120693 | avg loss 3.120693 | lr 0.0001000
+Relative val loss: 2.06347
+Absolute val loss: 2.06347
+-----------------------------------------------------------------------------------------
+| end of epoch 135 | time: 11.27s | epoch loss 3.602596 |
+-----------------------------------------------------------------------------------------
+ [  136] (    0/   24) | ms/batch 314.3170 | loss 2.359746 | avg loss 2.359746 | lr 0.0001000
+Relative val loss: 3.53063
+Absolute val loss: 3.53063
+-----------------------------------------------------------------------------------------
+| end of epoch 136 | time: 11.48s | epoch loss 3.626030 |
+-----------------------------------------------------------------------------------------
+ [  137] (    0/   24) | ms/batch 220.6855 | loss 2.931696 | avg loss 2.931696 | lr 0.0001000
+Relative val loss: 2.85005
+Absolute val loss: 2.85005
+-----------------------------------------------------------------------------------------
+| end of epoch 137 | time: 11.28s | epoch loss 3.228357 |
+-----------------------------------------------------------------------------------------
+ [  138] (    0/   24) | ms/batch 110.5378 | loss 3.728163 | avg loss 3.728163 | lr 0.0001000
+Relative val loss: 3.89163
+Absolute val loss: 3.89163
+-----------------------------------------------------------------------------------------
+| end of epoch 138 | time: 11.33s | epoch loss 3.388533 |
+-----------------------------------------------------------------------------------------
+ [  139] (    0/   24) | ms/batch 111.1736 | loss 3.029609 | avg loss 3.029609 | lr 0.0001000
+Relative val loss: 2.41022
+Absolute val loss: 2.41022
+-----------------------------------------------------------------------------------------
+| end of epoch 139 | time: 11.27s | epoch loss 3.304537 |
+-----------------------------------------------------------------------------------------
+ [  140] (    0/   24) | ms/batch 111.0616 | loss 5.301370 | avg loss 5.301370 | lr 0.0001000
+Relative val loss: 1.69978
+Absolute val loss: 1.69978
+-----------------------------------------------------------------------------------------
+| end of epoch 140 | time: 11.74s | epoch loss 3.071160 |
+-----------------------------------------------------------------------------------------
+ [  141] (    0/   24) | ms/batch 144.9482 | loss 2.432413 | avg loss 2.432413 | lr 0.0001000
+Relative val loss: 2.46115
+Absolute val loss: 2.46115
+-----------------------------------------------------------------------------------------
+| end of epoch 141 | time: 14.24s | epoch loss 3.020780 |
+-----------------------------------------------------------------------------------------
+ [  142] (    0/   24) | ms/batch 181.9704 | loss 2.782498 | avg loss 2.782498 | lr 0.0001000
+Relative val loss: 2.27930
+Absolute val loss: 2.27930
+-----------------------------------------------------------------------------------------
+| end of epoch 142 | time: 14.14s | epoch loss 2.889050 |
+-----------------------------------------------------------------------------------------
+ [  143] (    0/   24) | ms/batch 110.8999 | loss 3.169857 | avg loss 3.169857 | lr 0.0001000
+Relative val loss: 2.65698
+Absolute val loss: 2.65698
+-----------------------------------------------------------------------------------------
+| end of epoch 143 | time: 14.22s | epoch loss 3.681158 |
+-----------------------------------------------------------------------------------------
+ [  144] (    0/   24) | ms/batch 111.5189 | loss 2.149778 | avg loss 2.149778 | lr 0.0001000
+Relative val loss: 2.40567
+Absolute val loss: 2.40567
+-----------------------------------------------------------------------------------------
+| end of epoch 144 | time: 14.24s | epoch loss 2.629075 |
+-----------------------------------------------------------------------------------------
+ [  145] (    0/   24) | ms/batch 110.4596 | loss 2.888296 | avg loss 2.888296 | lr 0.0001000
+Relative val loss: 2.20597
+Absolute val loss: 2.20597
+-----------------------------------------------------------------------------------------
+| end of epoch 145 | time: 14.47s | epoch loss 2.845194 |
+-----------------------------------------------------------------------------------------
+ [  146] (    0/   24) | ms/batch 162.2014 | loss 3.114716 | avg loss 3.114716 | lr 0.0001000
+Relative val loss: 2.50655
+Absolute val loss: 2.50655
+-----------------------------------------------------------------------------------------
+| end of epoch 146 | time: 14.64s | epoch loss 2.561258 |
+-----------------------------------------------------------------------------------------
+ [  147] (    0/   24) | ms/batch 303.7257 | loss 2.163653 | avg loss 2.163653 | lr 0.0001000
+Relative val loss: 3.20187
+Absolute val loss: 3.20187
+-----------------------------------------------------------------------------------------
+| end of epoch 147 | time: 14.59s | epoch loss 3.078576 |
+-----------------------------------------------------------------------------------------
+ [  148] (    0/   24) | ms/batch 210.1314 | loss 3.247398 | avg loss 3.247398 | lr 0.0001000
+Relative val loss: 2.94248
+Absolute val loss: 2.94248
+-----------------------------------------------------------------------------------------
+| end of epoch 148 | time: 14.26s | epoch loss 3.099231 |
+-----------------------------------------------------------------------------------------
+ [  149] (    0/   24) | ms/batch 305.3970 | loss 2.592631 | avg loss 2.592631 | lr 0.0001000
+Relative val loss: 2.19120
+Absolute val loss: 2.19120
+-----------------------------------------------------------------------------------------
+| end of epoch 149 | time: 14.49s | epoch loss 3.457837 |
+-----------------------------------------------------------------------------------------
+ [  150] (    0/   24) | ms/batch 408.4206 | loss 3.704528 | avg loss 3.704528 | lr 0.0001000
+Relative val loss: 3.43781
+Absolute val loss: 3.43781
+-----------------------------------------------------------------------------------------
+| end of epoch 150 | time: 14.25s | epoch loss 3.194043 |
+-----------------------------------------------------------------------------------------
+train_net.sh: line 67: gender: command not found

@@ -36,6 +36,8 @@ parser.add_argument('--use-image', action='store_true')
 parser.add_argument('--use-gut-microbiome', action='store_true')
 parser.add_argument('--use-pe-performance', action='store_true')
 parser.add_argument('--use-correlation', action='store_true')
+parser.add_argument('--use-gender', default=False, action='store_true',
+                help='Train model with gender')
 
 args = parser.parse_args()
 print(args)
@@ -44,10 +46,11 @@ print(args)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
+
 # 加载模型
-# Create the network architecture and load the best model
 model = SIMBA(
     chronological_age=args.chronological_age,
+    use_gender=args.use_gender,
     gender_multiplier=args.gender_multiplier,
     use_gut_microbiome=args.use_gut_microbiome,
     use_pe_performance=args.use_pe_performance,
@@ -151,7 +154,7 @@ def compute_feature_contributions(model, dataloader, device, enabled_features):
                 contribution_matrix[feature][age_group] = (contribution_matrix[feature][age_group] / total_contribution) * 100  # 归一化到 100%
 
     # **修改 key 名称映射**
-    key_mapping = {"x": "image", "y": "gender", "z": "age", "cor": "correlation_features"}
+    key_mapping = {"x": "image", "y": "gender", "z": "age", "cor": "correlation_features", 'gut':"nutrition", 'pe':"pe"}
     contribution_matrix = {key_mapping.get(k, k): v for k, v in contribution_matrix.items()}
     return contribution_matrix
 
